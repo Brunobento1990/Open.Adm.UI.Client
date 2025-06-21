@@ -20,7 +20,7 @@ export function ChipApp(props: propsChipApp) {
     <Chip
       size="small"
       sx={{ width: props.width }}
-      color={props.color}
+      color={props.color ?? "primary"}
       label={props.label}
       icon={<IconApp icon={props.icone as any} />}
     />
