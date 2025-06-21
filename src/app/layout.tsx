@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer/Footer";
 import { useSnackbar } from "@/components/SnackBar/UseSnackBar";
 import { AppAuthProvider } from "@/context/AppAuthContext";
 import { AppCarrinhoProvider } from "@/context/AppCarrinhoContext";
+import { AppParceiroProvider } from "@/context/AppParceiroContext";
 
 export default function RootLayout({
   children,
@@ -29,20 +30,22 @@ export default function RootLayout({
           content={`Real jigs – Ecommerce – iscas artificiais.`}
         />
       </head>
-      <AppThemeProvider>
-        <AppAuthProvider>
-          <AppCarrinhoProvider>
-            <body className="body-principal">
-              <Snack.Componet />
-              <div className="container-div">
-                <Header />
-                <main className="container-main">{children}</main>
-                <Footer />
-              </div>
-            </body>
-          </AppCarrinhoProvider>
-        </AppAuthProvider>
-      </AppThemeProvider>
+      <AppParceiroProvider>
+        <AppThemeProvider>
+          <AppAuthProvider>
+            <AppCarrinhoProvider>
+              <body className="body-principal">
+                <Snack.Componet />
+                <div className="container-div">
+                  <Header />
+                  <main className="container-main">{children}</main>
+                  <Footer />
+                </div>
+              </body>
+            </AppCarrinhoProvider>
+          </AppAuthProvider>
+        </AppThemeProvider>
+      </AppParceiroProvider>
     </html>
   );
 }
