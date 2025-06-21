@@ -1,4 +1,5 @@
-import { Chip, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
+import { ChipApp } from "../Chip/ChipApp";
 
 interface propsDividerApp {
   chip?: string;
@@ -9,7 +10,7 @@ export function DividerApp(props: propsDividerApp) {
   if (props.chip) {
     return (
       <Divider sx={{ width: props.width }}>
-        <Chip label={props.chip} />
+        <ChipApp label={props.chip} />
       </Divider>
     );
   }

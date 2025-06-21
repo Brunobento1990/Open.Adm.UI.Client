@@ -4,20 +4,6 @@ body {
   height: 100%;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #1c1c1c;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #fced18;
-  border-radius: 6px;
-}
-
 * {
   box-sizing: border-box;
   padding: 0;

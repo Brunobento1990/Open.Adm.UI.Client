@@ -17,8 +17,8 @@ jobs:
           echo "NEXT_PUBLIC_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env.production
           echo "$(<.env.production)"
       - name: Build
-        run: docker build . -t brunobentocaina/real-jigs-ui:stating
+        run: docker build . -t brunobentocaina/open-adm-client-ui:stating
       - name: Push
         run: |
           docker login -u brunobentocaina -p ${{ secrets.DOCKER_HUB_KEY }}
-          docker push brunobentocaina/real-jigs-ui:stating
+          docker push brunobentocaina/open-adm-client-ui:stating

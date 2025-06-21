@@ -51,7 +51,7 @@ export function Footer() {
         padding="1rem"
       >
         <TextApp
-          titulo={`${parceiro?.nomeFantasia} © ${new Date().getFullYear()}`}
+          titulo={`${parceiro?.nomeFantasia ?? ''} © ${new Date().getFullYear()}`}
         />
         <BoxApp>
           {parceiro?.telefones?.map((telefone, i) => (

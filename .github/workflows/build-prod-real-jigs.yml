@@ -1,9 +1,9 @@
+
 name: Docker Image CI
 
 on:
   push:
-    tags:
-      - '*.*.*'
+    branches: ["real-jigs"]
 
 jobs:
   build:
@@ -18,8 +18,8 @@ jobs:
           echo "NEXT_PUBLIC_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env.production
           echo "$(<.env.production)"
       - name: Build
-        run: docker build . -t brunobentocaina/open-adm-ui-client:${GITHUB_REF#refs/*/}
+        run: docker build . -t brunobentocaina/real-jigs-ui:v0.1.0
       - name: Push
         run: |
           docker login -u brunobentocaina -p ${{ secrets.DOCKER_HUB_KEY }}
-          docker push brunobentocaina/open-adm-ui-client:${GITHUB_REF#refs/*/}
+          docker push brunobentocaina/real-jigs-ui:v0.1.0
