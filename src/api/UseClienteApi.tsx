@@ -7,7 +7,7 @@ import { IUsuario, IUsuarioCreate } from "@/types/Usuario";
 export function useClienteApi() {
   const apiCreate = useApi({
     method: "POST",
-    url: "usuarios/create-sem-validar-cnae",
+    url: "usuarios/create",
   });
 
   const apiEndereco = useApi({

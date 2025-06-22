@@ -13,6 +13,7 @@ import { useNavigateApp } from "@/hooks/UseNavigateApp";
 import { useContext, useEffect } from "react";
 import { ViewResumoCarrinho } from "./ViewResumoCarrinho";
 import { IProduto } from "@/types/Produto";
+import { AlertApp } from "@/components/Alert/AlertApp";
 
 export function ViewCarrinho() {
   const {
@@ -63,6 +64,10 @@ export function ViewCarrinho() {
 
   return (
     <BoxApp width="100vw" padding="1rem">
+      <AlertApp
+        tipo="warning"
+        texto="Atenção, nosso tempo mínimo de entrega do pedido é de 40 dias."
+      />
       <GridApp container spacing={2}>
         <GridApp sm={8} xs={12}>
           <BoxApp
