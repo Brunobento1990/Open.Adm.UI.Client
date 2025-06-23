@@ -22,7 +22,7 @@ export default function ModalApp(props: propsModalApp) {
       open={props.open}
       onClose={props.close}
     >
-      <DialogTitle>Real jigs</DialogTitle>
+      <DialogTitle>Área do pescador</DialogTitle>
       <IconButton
         aria-label="close"
         onClick={props.close}

@@ -26,15 +26,14 @@ export function ViewCategoria() {
     init();
   }, []);
 
-  if (listarPorCategorias.status === "loading") {
-    return <LoadingApp height="300px" marginTop="1rem" texto="Categorias..." />;
-  }
-
   const categoria =
     produtos.length === 0 ? "" : produtos[0].categoria?.descricao;
 
   return (
-    <BoxApp padding="1rem">
+    <BoxApp padding="1rem" width="100vw">
+      {listarPorCategorias.status === "loading" && (
+        <LoadingApp height="300px" marginTop="1rem" texto="Categorias..." />
+      )}
       <BoxApp
         display="flex"
         alignItems="center"
@@ -45,9 +44,7 @@ export function ViewCategoria() {
       </BoxApp>
       <GridApp container spacing={3}>
         {produtos.map((produto) => (
-          <GridApp key={produto.id} xs={12} sm={6}>
-            <CardProduto produto={produto} />
-          </GridApp>
+          <CardProduto produto={produto} key={produto.id} />
         ))}
       </GridApp>
     </BoxApp>

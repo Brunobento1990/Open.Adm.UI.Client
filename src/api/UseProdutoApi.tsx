@@ -7,11 +7,13 @@ export function useProdutoApi() {
   const apiListarPorCategoria = useApi({
     method: "GET",
     url: "produtos/list-by-categorias?categoriaId=",
+    statusInicial: "loading",
   });
 
   const apiListarPaginacao = useApi({
     method: "GET",
     url: "produtos/list",
+    statusInicial: "loading",
   });
 
   async function listarPorCategorias(

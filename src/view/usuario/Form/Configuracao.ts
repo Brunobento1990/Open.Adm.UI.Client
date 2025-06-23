@@ -8,7 +8,7 @@ export const initialValues: IUsuarioCreate = {
   cpf: "",
   senha: "",
   reSenha: "",
-  validouCnpj: false,
+  validouCnpj: true,
 };
 
 export const schema = new YupAdapter()

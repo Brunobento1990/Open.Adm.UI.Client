@@ -10,11 +10,13 @@ import { rotas } from "@/config/ConfigRotas";
 import { Button } from "../Button/ButtonApp";
 import { useContext } from "react";
 import { AppParceiroContext } from "@/context/AppParceiroContext";
+import { useThemeApp } from "@/hooks/UseThemeApp";
 
 export function Footer() {
   const { categorias } = useListarCategoriasApi();
   const { parceiro } = useContext(AppParceiroContext);
   const { navigate } = useNavigateApp();
+  const { cores } = useThemeApp();
 
   return (
     <footer>
@@ -51,7 +53,9 @@ export function Footer() {
         padding="1rem"
       >
         <TextApp
-          titulo={`${parceiro?.nomeFantasia ?? ''} © ${new Date().getFullYear()}`}
+          titulo={`${
+            parceiro?.nomeFantasia ?? ""
+          } © ${new Date().getFullYear()}`}
         />
         <BoxApp>
           {parceiro?.telefones?.map((telefone, i) => (
@@ -96,6 +100,13 @@ export function Footer() {
           fontWeight={600}
           fontSize="1.2rem"
           color="primary"
+        />
+        <IconButtonTooltipApp
+          icon={listaDeIcones.whatsApp}
+          titulo="Entre en contato"
+          cor={cores.success}
+          href="https://api.whatsapp.com/send?phone=5547999964106"
+          target="_blank"
         />
       </BoxApp>
     </footer>

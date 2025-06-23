@@ -3,12 +3,13 @@ import { BoxApp } from "../Box/BoxApp";
 import { TextApp } from "../Text/TextApp";
 import { listaDeIcones } from "@/config/ListaDeIcones";
 import { Button } from "../Button/ButtonApp";
-import { CardFoto } from "./CardFoto";
 import { useThemeApp } from "@/hooks/UseThemeApp";
 import { CardPesoTamanho } from "./CardPesoTamanho";
 import { useContext, useState } from "react";
 import { AppCarrinhoContext } from "@/context/AppCarrinhoContext";
 import { cleanFormatMoney } from "@/utils/FormatMoney";
+import { GridApp } from "../Grid/GridApp";
+import { DividerApp } from "../Divider/DividerApp";
 
 interface propsCardProduto {
   produto: IProduto;
@@ -16,6 +17,7 @@ interface propsCardProduto {
   onBlur?: (produto: IProduto) => void;
   habilitarExclusaoProduto?: boolean;
   index?: number;
+  sm?: number;
 }
 
 export function CardProduto(props: propsCardProduto) {
@@ -26,8 +28,7 @@ export function CardProduto(props: propsCardProduto) {
     excluirProdutoCarrinho,
     statusExcluirItem,
   } = useContext(AppCarrinhoContext);
-  const { backgroundColor, borderRadius, isMobile } = useThemeApp();
-  const width = isMobile ? "100%" : "50%";
+  const { borderRadius, isMobile } = useThemeApp();
 
   function onChangePeso(index: number, qtd?: number) {
     if (produto.pesos[index].precoProduto) {
@@ -115,49 +116,30 @@ export function CardProduto(props: propsCardProduto) {
   }
 
   return (
-    <BoxApp
-      display="flex"
-      boxShadow="rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;"
-      hover={{
-        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px;",
-      }}
-      borderRadius={borderRadius}
-      padding="1rem"
-      gap="1rem"
-      flexDirection={isMobile ? "column" : undefined}
-    >
-      <CardFoto
-        width={width}
-        borderRadius={borderRadius}
-        backgroundColor={backgroundColor.default}
-        descricao={produto.descricao}
-        foto={produto.foto}
-      />
+    <GridApp xs={12} sm={props.sm ?? 3} width="100%">
       <BoxApp
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        flexDirection="column"
-        width={width}
-        height="100%"
+        width="100%"
+        boxShadow="rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;"
+        hover={{
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px;",
+        }}
+        borderRadius={borderRadius}
+        padding="1rem"
       >
+        <img
+          src={produto.foto}
+          alt={produto.descricao}
+          style={{ maxWidth: "250px", width: "100%" }}
+        />
         <BoxApp
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          width="100%"
         >
-          <TextApp
-            titulo={produto.descricao}
-            fontSize="18px"
-            fontWeight={600}
-          />
-          <TextApp
-            fontSize="12px"
-            fontWeight={600}
-            titulo={`#${produto.referencia ?? ""}`}
-          />
+          <TextApp titulo={produto.descricao} fontWeight={600} />
+          <TextApp titulo={`# ${produto.referencia}`} />
         </BoxApp>
+        <DividerApp width="100%" />
         <form
           style={{ width: "100%" }}
           onSubmit={async (e) => {
@@ -172,7 +154,11 @@ export function CardProduto(props: propsCardProduto) {
               flexDirection="column"
               gap=".5rem"
             >
-              <TextApp titulo="Pesos disponíveis" marginBotton="1rem" />
+              <TextApp
+                titulo="Pesos disponíveis"
+                marginTop="1rem"
+                marginBotton="1rem"
+              />
               {produto.pesos.map((peso, index) => (
                 <CardPesoTamanho
                   id={peso.id}
@@ -196,6 +182,7 @@ export function CardProduto(props: propsCardProduto) {
                 fontSize="12px"
                 titulo="Tamanhos disponíveis"
                 marginBotton="1rem"
+                marginTop="1rem"
               />
               {produto.tamanhos.map((tamanho, index) => (
                 <CardPesoTamanho
@@ -235,6 +222,6 @@ export function CardProduto(props: propsCardProduto) {
           </BoxApp>
         </form>
       </BoxApp>
-    </BoxApp>
+    </GridApp>
   );
 }

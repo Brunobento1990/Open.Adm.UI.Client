@@ -5,29 +5,20 @@ import { BoxApp } from "@/components/Box/BoxApp";
 import { Button } from "@/components/Button/ButtonApp";
 import { rotas } from "@/config/ConfigRotas";
 import { useNavigateApp } from "@/hooks/UseNavigateApp";
-import { useThemeApp } from "@/hooks/UseThemeApp";
 import { IUsuarioCreate } from "@/types/Usuario";
-import { useContext, useState } from "react";
-import { initialValues, schema, tiposPessoa } from "./Configuracao";
+import { useContext } from "react";
+import { initialValues, schema } from "./Configuracao";
 import { InputApp, MaskType } from "@/components/Input/InputApp";
 import { TextApp } from "@/components/Text/TextApp";
-import SelectApp from "@/components/Select/SelectApp";
 import { GridApp } from "@/components/Grid/GridApp";
 import { clearMaskCpfCnpj, clearMaskPhone } from "@/utils/MaskCpfCnpj";
 import { useClienteApi } from "@/api/UseClienteApi";
 import { AppAuthContext } from "@/context/AppAuthContext";
-import { useSnackbar } from "@/components/SnackBar/UseSnackBar";
-import { useCnpjApi } from "@/api/UseCnpjApi";
 
 export function FormUsuario() {
-  const [tipoPessoa, setTipoPessoa] = useState(1);
-  const { shadow, borderRadius } = useThemeApp();
   const { criarUsuario } = useClienteApi();
   const { navigate } = useNavigateApp();
-  const { consultarCnpj } = useCnpjApi();
-  const { show } = useSnackbar();
   const { logar } = useContext(AppAuthContext);
-  const isJuridico = tipoPessoa === 1;
   const form = useFormikAdapter<IUsuarioCreate>({
     initialValues: initialValues,
     validationSchema: schema,
@@ -35,17 +26,10 @@ export function FormUsuario() {
   });
 
   async function submit() {
-    if (!form.values.validouCnpj && tipoPessoa === 1) {
-      show("É necessário validar seu CNPJ", "error");
-      return;
-    }
-
     const body = {
       ...form.values,
       telefone: clearMaskPhone(form.values.telefone),
       cpf: clearMaskCpfCnpj(form.values.cpf),
-      cnpj: clearMaskCpfCnpj(form.values.cpf),
-      tipoPessoa,
     };
     const response = await criarUsuario.fetch(body as any);
     if (response) {
@@ -53,45 +37,6 @@ export function FormUsuario() {
       navigate(rotas.home);
       return;
     }
-  }
-
-  async function validarCnpj() {
-    if (!form.values.cpf) {
-      show("Informe se CNPJ", "error");
-      return;
-    }
-
-    const cnpj = clearMaskCpfCnpj(form.values.cpf) ?? "";
-
-    if (!cnpj) {
-      return;
-    }
-
-    const response = await consultarCnpj.fetch(cnpj);
-    if (!response) {
-      return;
-    }
-
-    if (response.descricao_situacao_cadastral !== "ATIVA") {
-      show("CNPJ inativo!", "error");
-      return;
-    }
-
-    if (!response.cnae_fiscal_descricao?.toLowerCase().includes("pesca")) {
-      const cnaesSecundarios = response.cnaes_secundarios.find((x) =>
-        x.descricao.toLowerCase().includes("pesca")
-      );
-      if (!cnaesSecundarios) {
-        show("CNPJ inválido!", "error");
-        return;
-      }
-    }
-
-    show("CNPJ validado com sucesso!", "success");
-    form.setValue({
-      validouCnpj: true,
-      nome: response.nome_fantasia,
-    });
   }
 
   return (
@@ -114,38 +59,14 @@ export function FormUsuario() {
           fontWeight={600}
         />
         <TextApp titulo="Faça suas compras fácil e rápido!" />
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          gap="1rem"
-        >
-          <SelectApp
-            keyDescricao="descricao"
-            keyValue="id"
-            value={tipoPessoa}
-            onChange={(value) => setTipoPessoa(value)}
-            label="Tipo pessoa"
-            id="tipoPessoa"
-            opcoes={tiposPessoa}
-          />
-          {isJuridico && (
-            <Button
-              variant="contained"
-              title="validar CNPJ"
-              onClick={validarCnpj}
-              loading={consultarCnpj.status === "loading"}
-            />
-          )}
-        </BoxApp>
         <GridApp container spacing={3}>
           <GridApp xs={12} sm={6}>
             <InputApp
               fullWidth
               id="cpf"
-              label={isJuridico ? "CNPJ" : "CPF"}
+              label={"CPF"}
               maxLength={255}
-              mask={isJuridico ? MaskType.CNPJ : MaskType.CPF}
+              mask={MaskType.CPF}
               onChange={form.onChange}
               onBlur={form.onBlur}
               value={form.values.cpf}

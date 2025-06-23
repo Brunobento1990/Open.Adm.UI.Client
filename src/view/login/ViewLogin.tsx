@@ -52,7 +52,7 @@ export function ViewLogin() {
         height="calc(100vh - 100px)"
       >
         <TextApp
-          titulo="Bem vindo a Real Jigs! 👋🏻"
+          titulo="Bem vindo a Área do pescador! 👋🏻"
           fontSize="18px"
           fontWeight={600}
         />
@@ -69,8 +69,8 @@ export function ViewLogin() {
             fullWidth
             autoFocus
             id="cpfCnpj"
-            label="CPF/CNPJ"
-            mask={MaskType.CPFCNPJ}
+            label="CPF"
+            mask={MaskType.CPF}
             onChange={form.onChange}
             onBlur={form.onBlur}
             error={form.error("cpfCnpj")}

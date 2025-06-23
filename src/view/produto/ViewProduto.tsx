@@ -74,17 +74,16 @@ export function ViewProduto() {
     init();
   }, [pagina]);
 
-  if (paginacaoProduto.status === "loading") {
-    return <LoadingApp height="300px" marginTop="1rem" />;
-  }
-
-  if (paginacao.values.length === 0) {
+  if (paginacao.values.length === 0 && paginacaoProduto.status !== "loading") {
     return <></>;
   }
 
   return (
     <>
       <BoxApp padding="1rem">
+        {paginacaoProduto.status === "loading" && (
+          <LoadingApp height="300px" marginTop="1rem" />
+        )}
         <BoxApp
           display="flex"
           alignItems="center"
@@ -101,9 +100,7 @@ export function ViewProduto() {
         </BoxApp>
         <GridApp container spacing={3}>
           {paginacao.values.map((produto) => (
-            <GridApp key={produto.id} xs={12} sm={6}>
-              <CardProduto produto={produto} />
-            </GridApp>
+            <CardProduto key={produto.id} produto={produto} />
           ))}
         </GridApp>
         <BoxApp

@@ -64,14 +64,6 @@ export function MenuApp(props: propsMenuApp) {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => navegarMenu(rotas.lojaParceira)}>
-                <ListItemIcon>
-                  <IconApp icon={listaDeIcones.lojaParceia} />
-                </ListItemIcon>
-                <ListItemText primary="Lojas parceiras" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
               <ListItemButton onClick={() => navegarMenu(rotas.minhaConta)}>
                 <ListItemIcon>
                   <IconApp icon={listaDeIcones.avatar} />

@@ -10,7 +10,7 @@ import { TextoDuplo } from "@/components/Text/TextoDuplo";
 import { rotas } from "@/config/ConfigRotas";
 import { useNavigateApp } from "@/hooks/UseNavigateApp";
 import { IUsuario } from "@/types/Usuario";
-import { maskCpfCnpj } from "@/utils/MaskCpfCnpj";
+import { maskCPF } from "@/utils/MaskCpfCnpj";
 import { maskPhone } from "@/utils/MaskPhone";
 import { useEffect, useState } from "react";
 
@@ -70,8 +70,8 @@ export function ViewMinhaConta() {
       <DividerApp chip="Detalhes" width="100%" />
       <TextoDuplo titulo="E-mail:" texto={`${usuario?.email ?? ""}`} />
       <TextoDuplo
-        titulo="CPF/CNPJ:"
-        texto={`${maskCpfCnpj(usuario?.cpf ?? usuario?.cnpj) ?? ""}`}
+        titulo="CPF:"
+        texto={`${maskCPF(usuario?.cpf) ?? ""}`}
       />
       <TextoDuplo
         titulo="Telefone:"

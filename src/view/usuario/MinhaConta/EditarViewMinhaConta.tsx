@@ -11,11 +11,7 @@ import { initialValues, schemaEdit } from "../Form/Configuracao";
 import { GridApp } from "@/components/Grid/GridApp";
 import { InputApp, MaskType } from "@/components/Input/InputApp";
 import { rotas } from "@/config/ConfigRotas";
-import {
-  clearMaskCnpj,
-  clearMaskCpf,
-  clearMaskPhone,
-} from "@/utils/MaskCpfCnpj";
+import { clearMaskCpf, clearMaskPhone } from "@/utils/MaskCpfCnpj";
 import { IUsuario } from "@/types/Usuario";
 
 export function EditarViewMinhaConta() {
@@ -26,7 +22,6 @@ export function EditarViewMinhaConta() {
     validationSchema: schemaEdit,
     onSubmit: submit,
   });
-  const isJuridico = form.values.cnpj && form.values.cnpj !== undefined;
 
   async function init() {
     const response = await obterUsuarioLogado.fecth();
@@ -39,7 +34,6 @@ export function EditarViewMinhaConta() {
     const response = await editarUsuario.fetch({
       ...form.values,
       cpf: clearMaskCpf(form.values.cpf),
-      cnpj: clearMaskCnpj(form.values.cnpj),
       telefone: clearMaskPhone(form.values.telefone),
     });
     if (response) {
@@ -59,37 +53,20 @@ export function EditarViewMinhaConta() {
     <form onSubmit={form.onSubmit} style={{ padding: "1rem" }}>
       <GridApp container spacing={3}>
         <GridApp xs={12} sm={6}>
-          {form.values.cnpj ? (
-            <InputApp
-              fullWidth
-              id="cnpj"
-              label={"CNPJ"}
-              maxLength={255}
-              mask={MaskType.CNPJ}
-              onChange={form.onChange}
-              onBlur={form.onBlur}
-              value={form.values.cnpj}
-              error={form.error("cnpj")}
-              helperText={form.helperText("cnpj")}
-              required
-              readonly
-            />
-          ) : (
-            <InputApp
-              fullWidth
-              id="cpf"
-              label={"CPF"}
-              maxLength={255}
-              mask={MaskType.CPF}
-              onChange={form.onChange}
-              onBlur={form.onBlur}
-              value={form.values.cpf}
-              error={form.error("cpf")}
-              helperText={form.helperText("cpf")}
-              required
-              readonly
-            />
-          )}
+          <InputApp
+            fullWidth
+            id="cpf"
+            label={"CPF"}
+            maxLength={255}
+            mask={MaskType.CPF}
+            onChange={form.onChange}
+            onBlur={form.onBlur}
+            value={form.values.cpf}
+            error={form.error("cpf")}
+            helperText={form.helperText("cpf")}
+            required
+            readonly
+          />
         </GridApp>
         <GridApp xs={12} sm={6}>
           <InputApp

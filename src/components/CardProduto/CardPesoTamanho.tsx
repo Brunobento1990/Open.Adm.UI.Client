@@ -37,7 +37,7 @@ export function CardPesoTamanho(props: propsCardPesoTamanho) {
       {props.precoProduto && (
         <ChipApp
           width="100px"
-          color="primary"
+          color="success"
           icone={listaDeIcones.etiqueta}
           label={formatMoney(props.precoProduto.valorUnitario) ?? ""}
         />
