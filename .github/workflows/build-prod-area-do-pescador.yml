@@ -3,7 +3,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ["real-jigs"]
+    branches: ["area-do-pescador"]
 
 jobs:
   build:
