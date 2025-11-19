@@ -181,6 +181,7 @@ export function CardProduto(props: propsCardProduto) {
                   key={peso.id}
                   precoProduto={peso.precoProduto}
                   onBlur={onBlur}
+                  temEstoqueDisponivel={peso.temEstoqueDisponivel}
                 />
               ))}
             </BoxApp>
@@ -205,6 +206,7 @@ export function CardProduto(props: propsCardProduto) {
                   descricao={tamanho.descricao}
                   precoProduto={tamanho.precoProduto}
                   onBlur={onBlur}
+                  temEstoqueDisponivel={tamanho.temEstoqueDisponivel}
                 />
               ))}
             </BoxApp>

@@ -15,6 +15,7 @@ export function ViewCategoria() {
   const [produtos, setProdutos] = useState<IProduto[]>([]);
   const { params } = useNavigateApp();
 
+  
   async function init() {
     const response = await listarPorCategorias.fetch(params.id as string);
     if (response) {
@@ -25,10 +26,6 @@ export function ViewCategoria() {
   useEffect(() => {
     init();
   }, []);
-
-  if (listarPorCategorias.status === "loading") {
-    return <LoadingApp height="300px" marginTop="1rem" texto="Categorias..." />;
-  }
 
   const categoria =
     produtos.length === 0 ? "" : produtos[0].categoria?.descricao;
@@ -43,6 +40,9 @@ export function ViewCategoria() {
       >
         <TextApp fontSize="20px" fontWeight={600} titulo={categoria ?? ""} />
       </BoxApp>
+      {listarPorCategorias.status === "loading" && (
+        <LoadingApp height="300px" marginTop="1rem" texto="Categorias..." />
+      )}
       <GridApp container spacing={3}>
         {produtos.map((produto) => (
           <GridApp key={produto.id} xs={12} sm={6}>

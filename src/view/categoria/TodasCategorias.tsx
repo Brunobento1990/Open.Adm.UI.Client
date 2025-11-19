@@ -17,12 +17,9 @@ export function TodasCategorias() {
   const { categorias, status } = useListarCategoriasApi();
   const { navigate } = useNavigateApp();
 
-  if (status === "loading") {
-    return <LoadingApp height="350px" />;
-  }
-
   return (
     <BoxApp width="100vw" maxWidth="750px">
+      {status === "loading" && <LoadingApp height="350px" />}
       <GridApp container spacing={3} width="100%" padding="1rem">
         {categorias.map((categoria) => (
           <GridApp width="100%" key={categoria.id} sm={6} xs={12}>
