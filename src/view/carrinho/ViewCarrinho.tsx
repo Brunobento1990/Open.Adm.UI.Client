@@ -80,6 +80,7 @@ export function ViewCarrinho() {
           >
             {produtos.map((produto, index) => (
               <CardProduto
+                mostrarValorUnitario
                 desabilitarBtnAddCarrinho
                 key={produto.id}
                 produto={produto}

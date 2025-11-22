@@ -14,13 +14,14 @@ import ModalApp from "@/components/Modal/ModalApp";
 import SelectApp from "@/components/Select/SelectApp";
 import { TextApp } from "@/components/Text/TextApp";
 import { listaDeIcones } from "@/config/ListaDeIcones";
+import { AppAuthContext } from "@/context/AppAuthContext";
 import { useThemeApp } from "@/hooks/UseThemeApp";
 import { IPaginacaoResponse } from "@/types/PaginacaoResponse";
 import { IPeso } from "@/types/Peso";
 import { IProduto } from "@/types/Produto";
 import { ITamanhos } from "@/types/Tamanho";
 import { Pagination } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export function ViewProduto() {
   const { paginacaoProduto } = useProdutoApi();
@@ -35,6 +36,7 @@ export function ViewProduto() {
   const [peso, setPeso] = useState<string>("");
   const [tamanhos, setTamanhos] = useState<ITamanhos[]>([]);
   const [tamanho, setTamanho] = useState<string>("");
+  const { usuario } = useContext(AppAuthContext);
   const [paginacao, setPaginacao] = useState<IPaginacaoResponse<IProduto>>({
     totalDeRegistros: 0,
     totalPaginas: 0,
@@ -105,7 +107,10 @@ export function ViewProduto() {
             <GridApp container spacing={3}>
               {paginacao.values.map((produto) => (
                 <GridApp key={produto.id} xs={12} sm={6}>
-                  <CardProduto produto={produto} />
+                  <CardProduto
+                    mostrarValorUnitario={usuario !== undefined}
+                    produto={produto}
+                  />
                 </GridApp>
               ))}
             </GridApp>

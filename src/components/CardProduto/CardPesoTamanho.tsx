@@ -14,9 +14,11 @@ interface propsCardPesoTamanho {
   onChange: (qtd?: number) => void;
   onBlur?: () => void;
   temEstoqueDisponivel?: boolean;
+  mostrarValorUnitario: boolean;
 }
 
 export function CardPesoTamanho(props: propsCardPesoTamanho) {
+  const mostrarValorUnitario = props.mostrarValorUnitario && props.precoProduto;
   return (
     <BoxApp
       display="flex"
@@ -48,7 +50,7 @@ export function CardPesoTamanho(props: propsCardPesoTamanho) {
           label={"Sem estoque"}
         />
       )}
-      {props.precoProduto && (
+      {mostrarValorUnitario && (
         <Chip
           sx={{
             marginTop: ".3rem",
@@ -56,7 +58,7 @@ export function CardPesoTamanho(props: propsCardPesoTamanho) {
           }}
           size="small"
           icon={<IconApp icon={listaDeIcones.etiqueta} />}
-          label={formatMoney(props.precoProduto.valorUnitario) ?? ""}
+          label={formatMoney(props.precoProduto?.valorUnitario) ?? ""}
         />
       )}
     </BoxApp>

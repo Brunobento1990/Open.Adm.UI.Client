@@ -1,5 +1,6 @@
 export const rotas = {
   home: "/",
+  cadastroRealizado: "/cadastro-realizado",
   produto: "/produto",
   lojaParceira: "/loja-parceira",
   categoria: "/categoria",
