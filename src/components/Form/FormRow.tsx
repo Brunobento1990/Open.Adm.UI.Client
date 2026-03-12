@@ -1,5 +1,5 @@
 import { propsFormRow } from "@/types/Form";
-import { Box, Grid2 } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
 export function FormRow(props: propsFormRow) {
   return (
@@ -15,9 +15,9 @@ export function FormRow(props: propsFormRow) {
         borderRadius: props.borderRadius,
       }}
     >
-      <Grid2 container spacing={props.spacing} direction={props.direction}>
+      <Grid container spacing={props.spacing} direction={props.direction}>
         {props.children}
-      </Grid2>
+      </Grid>
     </Box>
   );
 }
