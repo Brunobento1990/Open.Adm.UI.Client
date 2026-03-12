@@ -14,9 +14,9 @@ jobs:
       - name: Parse da tag
         id: vars
         run: |
-          TAG="${GITHUB_REF_NAME}"                 # realjigs-v1.12.0
-          CLIENTE="${TAG%%-v*}"                    # realjigs
-          VERSAO="${TAG#${CLIENTE}-}"              # v1.12.0
+          TAG="${GITHUB_REF_NAME}"
+          CLIENTE="${TAG%%-v*}"
+          VERSAO="${TAG#${CLIENTE}-}"
           SHA_SHORT="$(echo "$GITHUB_SHA" | cut -c1-7)"
           echo "cliente=$CLIENTE" >> $GITHUB_OUTPUT
           echo "versao=$VERSAO" >> $GITHUB_OUTPUT
