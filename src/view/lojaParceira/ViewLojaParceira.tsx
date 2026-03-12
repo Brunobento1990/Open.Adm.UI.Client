@@ -68,7 +68,7 @@ export function ViewLojaParceira() {
     <>
       <Grid container spacing={6} sx={{ marginTop: "5rem", padding: "1rem" }}>
         {paginacao.values.map((loja, i) => (
-          <Grid item xs={12} sm={6} key={i}>
+          <Grid size={{ xs: 12, sm: 6 }} key={i}>
             <Card>
               {loja.foto && (
                 <BoxApp
