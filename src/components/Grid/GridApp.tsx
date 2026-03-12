@@ -1,4 +1,4 @@
-import { Grid2 } from "@mui/material";
+import { Grid } from "@mui/material";
 import { ReactNode } from "react";
 
 interface propsGridApp {
@@ -13,7 +13,7 @@ interface propsGridApp {
 
 export function GridApp(props: propsGridApp) {
   return (
-    <Grid2
+    <Grid
       width="100%"
       spacing={props.spacing}
       container={props.container}
@@ -21,6 +21,6 @@ export function GridApp(props: propsGridApp) {
       padding={props.padding}
     >
       {props.children}
-    </Grid2>
+    </Grid>
   );
 }
