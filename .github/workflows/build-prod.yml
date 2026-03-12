@@ -1,25 +1,42 @@
-name: Docker Image CI
+name: Build Docker por Tag de Cliente
 
 on:
   push:
     tags:
-      - '*.*.*'
+      - '*-v*.*.*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Parse da tag
+        id: vars
+        run: |
+          TAG="${GITHUB_REF_NAME}"                 # realjigs-v1.12.0
+          CLIENTE="${TAG%%-v*}"                    # realjigs
+          VERSAO="${TAG#${CLIENTE}-}"              # v1.12.0
+          SHA_SHORT="$(echo "$GITHUB_SHA" | cut -c1-7)"
+          echo "cliente=$CLIENTE" >> $GITHUB_OUTPUT
+          echo "versao=$VERSAO" >> $GITHUB_OUTPUT
+          echo "sha_short=$SHA_SHORT" >> $GITHUB_OUTPUT
+
       - name: Make envfile
         run: |
-          cat > .env.production
-          echo "NEXT_PUBLIC_URL_API=${{ secrets.URL_API }}" >> .env.production
-          echo "NEXT_PUBLIC_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env.production
-          echo "$(<.env.production)"
-      - name: Build
-        run: docker build . -t brunobentocaina/open-adm-ui-client:${GITHUB_REF#refs/*/}
-      - name: Push
-        run: |
-          docker login -u brunobentocaina -p ${{ secrets.DOCKER_HUB_KEY }}
-          docker push brunobentocaina/open-adm-ui-client:${GITHUB_REF#refs/*/}
+          cat > .env.production <<EOF
+          NEXT_PUBLIC_URL_API=${{ secrets.URL_API }}
+          NEXT_PUBLIC_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
+          EOF
+
+      - uses: docker/login-action@v3
+        with:
+          username: brunobentocaina
+          password: ${{ secrets.DOCKER_HUB_KEY }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            brunobentocaina/open-adm-ui-client:${{ steps.vars.outputs.cliente }}-${{ steps.vars.outputs.versao }}
