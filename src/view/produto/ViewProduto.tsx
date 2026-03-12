@@ -14,13 +14,14 @@ import ModalApp from "@/components/Modal/ModalApp";
 import SelectApp from "@/components/Select/SelectApp";
 import { TextApp } from "@/components/Text/TextApp";
 import { listaDeIcones } from "@/config/ListaDeIcones";
+import { AppAuthContext } from "@/context/AppAuthContext";
 import { useThemeApp } from "@/hooks/UseThemeApp";
 import { IPaginacaoResponse } from "@/types/PaginacaoResponse";
 import { IPeso } from "@/types/Peso";
 import { IProduto } from "@/types/Produto";
 import { ITamanhos } from "@/types/Tamanho";
 import { Pagination } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export function ViewProduto() {
   const { paginacaoProduto } = useProdutoApi();
@@ -35,6 +36,7 @@ export function ViewProduto() {
   const [peso, setPeso] = useState<string>("");
   const [tamanhos, setTamanhos] = useState<ITamanhos[]>([]);
   const [tamanho, setTamanho] = useState<string>("");
+  const { usuario } = useContext(AppAuthContext);
   const [paginacao, setPaginacao] = useState<IPaginacaoResponse<IProduto>>({
     totalDeRegistros: 0,
     totalPaginas: 0,
@@ -42,6 +44,9 @@ export function ViewProduto() {
   });
 
   async function init() {
+    if (window) {
+      window.scrollTo(0, 0);
+    }
     const response = await paginacaoProduto.fetch({
       page: pagina,
       categoriaId: categoria,
@@ -74,52 +79,57 @@ export function ViewProduto() {
     init();
   }, [pagina]);
 
-  if (paginacaoProduto.status === "loading") {
-    return <LoadingApp height="300px" marginTop="1rem" />;
-  }
-
-  if (paginacao.values.length === 0) {
+  if (paginacao.values.length === 0 && paginacaoProduto.status !== "loading") {
     return <></>;
   }
 
   return (
     <>
       <BoxApp padding="1rem">
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          padding="1rem"
-          gap="1rem"
-        >
-          <TextApp fontSize="20px" fontWeight={600} titulo={"Produtos"} />
-          <IconButtonTooltipApp
-            onClick={carregarFiltros}
-            icon={listaDeIcones.filtro}
-            titulo="Filtros"
-          />
-        </BoxApp>
-        <GridApp container spacing={3}>
-          {paginacao.values.map((produto) => (
-            <GridApp key={produto.id} xs={12} sm={6}>
-              <CardProduto produto={produto} />
+        {paginacaoProduto.status === "loading" ? (
+          <LoadingApp />
+        ) : (
+          <>
+            <BoxApp
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              padding="1rem"
+              gap="1rem"
+            >
+              <TextApp fontSize="20px" fontWeight={600} titulo={"Produtos"} />
+              <IconButtonTooltipApp
+                onClick={carregarFiltros}
+                icon={listaDeIcones.filtro}
+                titulo="Filtros"
+              />
+            </BoxApp>
+            <GridApp container spacing={3}>
+              {paginacao.values.map((produto) => (
+                <GridApp key={produto.id} xs={12} sm={6}>
+                  <CardProduto
+                    mostrarValorUnitario={usuario !== undefined}
+                    produto={produto}
+                  />
+                </GridApp>
+              ))}
             </GridApp>
-          ))}
-        </GridApp>
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          padding="1rem"
-        >
-          <Pagination
-            count={paginacao.totalPaginas}
-            page={pagina}
-            onChange={(_, value) => setPagina(value)}
-            variant="outlined"
-            shape="rounded"
-          />
-        </BoxApp>
+            <BoxApp
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              padding="1rem"
+            >
+              <Pagination
+                count={paginacao.totalPaginas}
+                page={pagina}
+                onChange={(_, value) => setPagina(value)}
+                variant="outlined"
+                shape="rounded"
+              />
+            </BoxApp>
+          </>
+        )}
       </BoxApp>
       <ModalApp close={() => setOpenModal(false)} open={openModal}>
         {listarPesos.status === "loading" ||

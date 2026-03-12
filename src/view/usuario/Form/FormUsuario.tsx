@@ -5,7 +5,6 @@ import { BoxApp } from "@/components/Box/BoxApp";
 import { Button } from "@/components/Button/ButtonApp";
 import { rotas } from "@/config/ConfigRotas";
 import { useNavigateApp } from "@/hooks/UseNavigateApp";
-import { useThemeApp } from "@/hooks/UseThemeApp";
 import { IUsuarioCreate } from "@/types/Usuario";
 import { useContext, useState } from "react";
 import { initialValues, schema, tiposPessoa } from "./Configuracao";
@@ -21,7 +20,6 @@ import { useCnpjApi } from "@/api/UseCnpjApi";
 
 export function FormUsuario() {
   const [tipoPessoa, setTipoPessoa] = useState(1);
-  const { shadow, borderRadius } = useThemeApp();
   const { criarUsuario } = useClienteApi();
   const { navigate } = useNavigateApp();
   const { consultarCnpj } = useCnpjApi();
@@ -48,9 +46,9 @@ export function FormUsuario() {
       tipoPessoa,
     };
     const response = await criarUsuario.fetch(body as any);
+
     if (response) {
-      logar(response);
-      navigate(rotas.home);
+      navigate(rotas.cadastroRealizado);
       return;
     }
   }

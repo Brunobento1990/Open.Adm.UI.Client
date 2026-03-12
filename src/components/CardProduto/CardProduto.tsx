@@ -9,6 +9,7 @@ import { CardPesoTamanho } from "./CardPesoTamanho";
 import { useContext, useState } from "react";
 import { AppCarrinhoContext } from "@/context/AppCarrinhoContext";
 import { cleanFormatMoney } from "@/utils/FormatMoney";
+import { useSnackbar } from "../SnackBar/UseSnackBar";
 
 interface propsCardProduto {
   produto: IProduto;
@@ -16,10 +17,12 @@ interface propsCardProduto {
   onBlur?: (produto: IProduto) => void;
   habilitarExclusaoProduto?: boolean;
   index?: number;
+  mostrarValorUnitario: boolean;
 }
 
 export function CardProduto(props: propsCardProduto) {
   const [produto, setProduto] = useState(props.produto);
+  const { show } = useSnackbar();
   const {
     adicionarItens,
     statusAdicionar,
@@ -30,6 +33,18 @@ export function CardProduto(props: propsCardProduto) {
   const width = isMobile ? "100%" : "50%";
 
   function onChangePeso(index: number, qtd?: number) {
+    if (
+      produto.pesos[index] &&
+      produto.pesos[index].quantidade &&
+      Number(qtd) > produto.pesos[index].quantidade
+    ) {
+      show(
+        `Quantidade disponível: ${produto.pesos[index].quantidade}.`,
+        "info"
+      );
+      return;
+    }
+
     if (produto.pesos[index].precoProduto) {
       let novosPesos = [...produto.pesos];
       novosPesos[index].precoProduto!.quantidade = qtd;
@@ -41,6 +56,18 @@ export function CardProduto(props: propsCardProduto) {
   }
 
   function onChangeTamanho(index: number, qtd?: number) {
+    if (
+      produto.tamanhos[index] &&
+      produto.tamanhos[index].quantidade &&
+      Number(qtd) > produto.tamanhos[index].quantidade
+    ) {
+      show(
+        `Quantidade disponível: ${produto.tamanhos[index].quantidade}.`,
+        "info"
+      );
+      return;
+    }
+
     if (produto.tamanhos[index].precoProduto) {
       let novosTamanhos = [...produto.tamanhos];
       novosTamanhos[index].precoProduto!.quantidade = qtd;
@@ -176,11 +203,13 @@ export function CardProduto(props: propsCardProduto) {
               {produto.pesos.map((peso, index) => (
                 <CardPesoTamanho
                   id={peso.id}
+                  mostrarValorUnitario={props.mostrarValorUnitario}
                   onChange={(value) => onChangePeso(index, value)}
                   descricao={peso.descricao}
                   key={peso.id}
                   precoProduto={peso.precoProduto}
                   onBlur={onBlur}
+                  temEstoqueDisponivel={peso.temEstoqueDisponivel}
                 />
               ))}
             </BoxApp>
@@ -203,8 +232,10 @@ export function CardProduto(props: propsCardProduto) {
                   onChange={(value) => onChangeTamanho(index, value)}
                   key={tamanho.id}
                   descricao={tamanho.descricao}
+                  mostrarValorUnitario={props.mostrarValorUnitario}
                   precoProduto={tamanho.precoProduto}
                   onBlur={onBlur}
+                  temEstoqueDisponivel={tamanho.temEstoqueDisponivel}
                 />
               ))}
             </BoxApp>
