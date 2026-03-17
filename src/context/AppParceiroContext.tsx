@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { IParceiro } from "@/types/Parceiro";
 import { useApiParceiro } from "@/api/UseParceiroApi";
 
@@ -21,6 +21,19 @@ export function AppParceiroProvider(props: IAppParceiroProvider) {
   async function init() {
     const response = await obter.fetch();
     if (response) {
+      if(document){
+        document.title = response.nomeFantasia;
+
+        if (response.logo) {
+          let favicon = document.querySelector<HTMLLinkElement>("link[rel='icon']");
+          if (!favicon) {
+            favicon = document.createElement("link");
+            favicon.rel = "icon";
+            document.head.appendChild(favicon);
+          }
+          favicon.href = `data:image/png;base64,${response.logo}`;
+        }
+      }
       setParceiro(response);
     }
   }
@@ -38,4 +51,9 @@ export function AppParceiroProvider(props: IAppParceiroProvider) {
       {props.children}
     </AppParceiroContext.Provider>
   );
+}
+
+export function useAppParceiroContext() {
+  const context = useContext(AppParceiroContext);
+  return context;
 }

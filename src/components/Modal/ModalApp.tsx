@@ -5,6 +5,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { ReactNode } from "react";
 import { IconApp } from "../Icon/IconApp";
 import { listaDeIcones } from "@/config/ListaDeIcones";
+import { useAppParceiroContext } from "@/context/AppParceiroContext";
 
 interface propsModalApp {
   open: boolean;
@@ -15,6 +16,7 @@ interface propsModalApp {
 }
 
 export default function ModalApp(props: propsModalApp) {
+  const { parceiro } = useAppParceiroContext();
   return (
     <Dialog
       maxWidth={props.maxWidth}
@@ -22,7 +24,7 @@ export default function ModalApp(props: propsModalApp) {
       open={props.open}
       onClose={props.close}
     >
-      <DialogTitle>Real jigs</DialogTitle>
+      <DialogTitle>{parceiro?.nomeFantasia ?? ""}</DialogTitle>
       <IconButton
         aria-label="close"
         onClick={props.close}

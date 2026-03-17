@@ -13,10 +13,12 @@ import { useLoginApi } from "@/api/UseLoginApi";
 import { useContext, useState } from "react";
 import { clearMaskCpfCnpj } from "@/utils/MaskCpfCnpj";
 import { AppAuthContext } from "@/context/AppAuthContext";
+import { useAppParceiroContext } from "@/context/AppParceiroContext";
 
 export function ViewLogin() {
   const { shadow, borderRadius } = useThemeApp();
   const { navigate } = useNavigateApp();
+  const { parceiro } = useAppParceiroContext();
   const { login } = useLoginApi();
   const { logar } = useContext(AppAuthContext);
   const form = useFormikAdapter({
@@ -52,7 +54,7 @@ export function ViewLogin() {
         height="calc(100vh - 100px)"
       >
         <TextApp
-          titulo="Bem vindo a Real Jigs! 👋🏻"
+          titulo={`Bem vindo a ${parceiro?.nomeFantasia ?? ""}! 👋🏻`}
           fontSize="18px"
           fontWeight={600}
         />
