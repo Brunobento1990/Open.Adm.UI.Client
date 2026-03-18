@@ -143,5 +143,6 @@ export function useApi(props: propsUseApi) {
     action,
     status,
     error,
+    loading: status === "loading",
   };
 }

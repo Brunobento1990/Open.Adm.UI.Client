@@ -1,5 +1,5 @@
 import { useApi } from "@/hooks/UseApi";
-import { IPedidoMinimo } from "@/types/PedidoMinimo";
+import { IPedidoMinimo, ITodasConfiguracoesDePedido } from "@/types/PedidoMinimo";
 import { pedidoRotasApi } from "./rotas/PedidoRotasApi";
 import { ICreatePedido } from "@/types/CreatePedido";
 import { IPedido, StatusPedido } from "@/types/Pedido";
@@ -8,6 +8,13 @@ export function UsePedidoApi() {
   const apiPedidoMinimo = useApi({
     method: "GET",
     url: pedidoRotasApi.pedidoMinimo,
+    naoRenderizarErro: true,
+    naoRenderizarResposta: true,
+  });
+
+    const apiTodasConfiguracoesDePedido = useApi({
+    method: "GET",
+    url: pedidoRotasApi.todasConfiguracoesDePedido,
     naoRenderizarErro: true,
     naoRenderizarResposta: true,
   });
@@ -36,6 +43,10 @@ export function UsePedidoApi() {
 
   async function obterPedidoMinimo(): Promise<IPedidoMinimo | undefined> {
     return await apiPedidoMinimo.action();
+  }
+
+    async function obterTodasConfiguracoesDePedido(): Promise<ITodasConfiguracoesDePedido | undefined> {
+    return await apiTodasConfiguracoesDePedido.action();
   }
 
   async function criarPedido(body: ICreatePedido): Promise<any> {
@@ -82,6 +93,10 @@ export function UsePedidoApi() {
     cancelarPedido: {
       fetch: cancelarPedido,
       status: apiPedidoCancelar.status,
+    },
+    obterTodasConfiguracoesDePedido: {
+      fetch: obterTodasConfiguracoesDePedido,
+      status: apiTodasConfiguracoesDePedido.status,
     },
   };
 }

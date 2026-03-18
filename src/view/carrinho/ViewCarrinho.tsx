@@ -25,7 +25,7 @@ export function ViewCarrinho() {
   const { navigate } = useNavigateApp();
 
   function editarProduto(index: number, produto: IProduto) {
-    let newProdutos = [...produtos];
+    const newProdutos = [...produtos];
     newProdutos[index] = produto;
     setProdutos(newProdutos);
   }
@@ -34,29 +34,33 @@ export function ViewCarrinho() {
     obterProdutos();
   }, []);
 
-  if (statusObterItens === "loading") {
-    return <LoadingApp height="350px" />;
-  }
 
   if (!quantidadeItensCarrinho || produtos.length === 0) {
     return (
       <BoxApp marginTop="1rem" padding="1rem" height="calc(100vh - 300px)">
-        <TextApp
-          titulo="Carrinho"
-          fontSize="18px"
-          fontWeight={600}
-          marginBotton="1rem"
-        />
-        <TextApp titulo="Você não tem nada no seu carrinho. Vamos mudar isso, use o link abaixo para" />
-        <TextApp
-          titulo="começar a navegar pelos nossos produtos."
-          marginBotton="1rem"
-        />
-        <Button
-          endIcon={listaDeIcones.flechaDireita}
-          onClick={() => navigate(rotas.produto)}
-          title="Explorar produtos"
-        />
+        {statusObterItens === "loading" ? (
+
+          < LoadingApp height="350px" />
+        ) : (
+          <>
+            <TextApp
+              titulo="Carrinho"
+              fontSize="18px"
+              fontWeight={600}
+              marginBotton="1rem"
+            />
+            <TextApp titulo="Você não tem nada no seu carrinho. Vamos mudar isso, use o link abaixo para" />
+            <TextApp
+              titulo="começar a navegar pelos nossos produtos."
+              marginBotton="1rem"
+            />
+            <Button
+              endIcon={listaDeIcones.flechaDireita}
+              onClick={() => navigate(rotas.produto)}
+              title="Explorar produtos"
+            />
+          </>
+        )}
       </BoxApp>
     );
   }
