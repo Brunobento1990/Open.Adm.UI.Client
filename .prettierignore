@@ -1,0 +1,5 @@
+# Ignore apenas node_modules e build
+node_modules
+.next
+dist
+build

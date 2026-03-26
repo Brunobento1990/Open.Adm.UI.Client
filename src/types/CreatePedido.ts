@@ -7,6 +7,11 @@ export interface ICreatePedido {
   valorFrete?: number;
 }
 
+export interface ICreatePedidoResponse {
+  message: string;
+  redirect?: string;
+}
+
 export interface IItemCreatePedido {
   produtoId: string;
   pesoId?: string;

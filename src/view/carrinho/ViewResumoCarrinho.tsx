@@ -127,6 +127,11 @@ export function ViewResumoCarrinho() {
 
     if (response) {
       resetarCarrinho();
+      if (response.redirect) {
+        navigate(response.redirect);
+        return;
+      }
+      show(response.message ?? "Pedido criado com sucesso!");
       navigate(rotas.home);
     }
   }
