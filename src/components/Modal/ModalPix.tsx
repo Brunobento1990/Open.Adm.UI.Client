@@ -1,4 +1,3 @@
-import { ICobrarPedidoResponse } from '@/types/CobrarPedido';
 import { ModalChildren } from './ModalChildren';
 import { BoxApp } from '../Box/BoxApp';
 import { formatMoney } from '@/utils/FormatMoney';
@@ -19,7 +18,7 @@ interface propsModalPix {
 
 export function ModalPix(props: propsModalPix) {
   const { cores, borderRadius, shadow } = useThemeApp();
-  const { open, setOpen, copiaECola, linkPagamento, qrCodeBase64, valor } = props;
+  const { open, setOpen, copiaECola, qrCodeBase64, valor } = props;
   return (
     <ModalChildren open={open} maxWidth="lg" retirarFooter close={() => setOpen(false)}>
       <BoxApp
