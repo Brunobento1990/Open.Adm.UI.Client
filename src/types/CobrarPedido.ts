@@ -2,9 +2,11 @@ import { TipoCobranca } from './TipoCobranca';
 
 export interface ICobrarPedido {
   pedidoId: string;
-  tipoCobranca: TipoCobranca;
+  meioDePagamento: TipoCobranca;
 }
 
 export interface ICobrarPedidoResponse {
   qrCodePix?: string;
+  qrCodePixBase64?: string;
+  linkPagamento?: string;
 }

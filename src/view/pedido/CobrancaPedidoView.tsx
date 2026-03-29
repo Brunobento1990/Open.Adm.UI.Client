@@ -16,6 +16,7 @@ import { IPedidoCobranca } from '@/types/Pedido';
 import { formatMoney } from '@/utils/FormatMoney';
 import { useContext, useEffect, useState } from 'react';
 import { CardsCobranca } from './TipoCobrancaForm';
+import { ModalPix } from '@/components/Modal/ModalPix';
 
 export function CobrancaPedidoView() {
   const { obterParaGerarCobranca, gerarCobranca } = UsePedidoApi();
@@ -26,10 +27,10 @@ export function CobrancaPedidoView() {
 
   const form = useFormikAdapter<ICobrarPedido>({
     initialValues: {
-      tipoCobranca: 1,
+      meioDePagamento: 1,
       pedidoId: params.id as string,
     },
-    validationSchema: new YupAdapter().number('tipoCobranca').build(),
+    validationSchema: new YupAdapter().number('meioDePagamento').build(),
     onSubmit: submit,
   });
 
@@ -48,45 +49,55 @@ export function CobrancaPedidoView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const CardCobranca = CardsCobranca[form.values.tipoCobranca];
+  const CardCobranca = CardsCobranca[form.values.meioDePagamento];
 
   return (
-    <FormApp loading={gerarCobranca.loading} submit={form.onSubmit} textoButton="Confirmar">
-      <BoxApp
-        display="flex"
-        alignItems="start"
-        justifyContent="start"
-        flexDirection="column"
-        padding="1rem"
-        gap="1rem"
-      >
-        <TextApp fontSize="22px" fontWeight={600} titulo={`Olá, ${usuario?.nome ?? ''}!`} />
-        <TextApp fontSize="22px" fontWeight={600} titulo="✅ Pedido confirmado!" />
-        <TextApp fontSize="18px" titulo={`Pedido: ${pedido?.numeroPedido}`} />
-        <TextApp fontSize="18px" titulo={`Sub total: ${formatMoney(pedido?.valor)}`} />
-        <TextApp fontSize="18px" titulo={`Frete: ${formatMoney(pedido?.valorFrete ?? 0)}`} />
-        <DividerApp width="100%" />
-        <TextApp
-          fontSize="22px"
-          fontWeight={600}
-          titulo={`Total: ${formatMoney(pedido?.valorTotal ?? 0)}`}
-        />
-        <DividerApp width="100%" />
-        <DropDownApp
-          desabilitarExclusao
-          keyLabel="descricao"
-          label="Selecione o meio de pagamento"
-          values={MeioPagamentoSelect}
-          width="100%"
-          id="tipoCobranca"
-          value={MeioPagamentoSelect.find((x) => x.id === form.values.tipoCobranca)}
-          onChange={form.onChange}
-          required
-          error={form.error('tipoCobranca')}
-          helperText={form.helperText('tipoCobranca')}
-        />
-        {CardCobranca && <CardCobranca cobranca={cobranca} />}
-      </BoxApp>
-    </FormApp>
+    <>
+      <ModalPix
+        open={!!cobranca}
+        setOpen={() => setCobranca(undefined)}
+        qrCodeBase64={cobranca?.qrCodePixBase64 ?? ''}
+        copiaECola={cobranca?.qrCodePix ?? ''}
+        linkPagamento={cobranca?.linkPagamento ?? ''}
+        valor={pedido?.valorTotal ?? 0}
+      />
+      <FormApp loading={gerarCobranca.loading} submit={form.onSubmit} textoButton="Confirmar">
+        <BoxApp
+          display="flex"
+          alignItems="start"
+          justifyContent="start"
+          flexDirection="column"
+          padding="1rem"
+          gap="1rem"
+        >
+          <TextApp fontSize="22px" fontWeight={600} titulo={`Olá, ${usuario?.nome ?? ''}!`} />
+          <TextApp fontSize="22px" fontWeight={600} titulo="✅ Pedido confirmado!" />
+          <TextApp fontSize="18px" titulo={`Pedido: ${pedido?.numeroPedido}`} />
+          <TextApp fontSize="18px" titulo={`Sub total: ${formatMoney(pedido?.valor)}`} />
+          <TextApp fontSize="18px" titulo={`Frete: ${formatMoney(pedido?.valorFrete ?? 0)}`} />
+          <DividerApp width="100%" />
+          <TextApp
+            fontSize="22px"
+            fontWeight={600}
+            titulo={`Total: ${formatMoney(pedido?.valorTotal ?? 0)}`}
+          />
+          <DividerApp width="100%" />
+          <DropDownApp
+            desabilitarExclusao
+            keyLabel="descricao"
+            label="Selecione o meio de pagamento"
+            values={MeioPagamentoSelect}
+            width="100%"
+            id="meioDePagamento"
+            value={MeioPagamentoSelect.find((x) => x.id === form.values.meioDePagamento)}
+            onChange={form.onChange}
+            required
+            error={form.error('meioDePagamento')}
+            helperText={form.helperText('meioDePagamento')}
+          />
+          {CardCobranca && <CardCobranca cobranca={cobranca} />}
+        </BoxApp>
+      </FormApp>
+    </>
   );
 }

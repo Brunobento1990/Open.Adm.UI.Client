@@ -6,5 +6,5 @@ export const pedidoRotasApi = {
   pedidoStatus: 'pedidos/list?statusPedido=',
   pedidoId: 'pedidos/get?pedidoId=',
   paraGerarCobranca: 'pedidos/get-gerar-pix?pedidoId=',
-  gerarCobranca: 'pedidos/gerar-cobranca',
+  gerarCobranca: 'pedido/cobrar',
 };
