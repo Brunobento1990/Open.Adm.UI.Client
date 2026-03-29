@@ -1,11 +1,11 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material';
 
 export const DarkTheme = createTheme({
   components: {
     MuiTypography: {
       defaultProps: {
         variantMapping: {
-          body1: "label",
+          body1: 'label',
         },
       },
     },
@@ -18,16 +18,16 @@ export const DarkTheme = createTheme({
   },
   palette: {
     primary: {
-      main: "#2c90ce",
+      main: '#ffa500',
     },
     text: {
-      primary: "#f6f8fc",
-      secondary: "#f1f1f1",
+      primary: '#f6f8fc',
+      secondary: '#f1f1f1',
     },
-    mode: "dark",
+    mode: 'dark',
     background: {
-      default: "#1c1c1c",
-      paper: "#242424",
+      default: '#1c1c1c',
+      paper: '#242424',
     },
   },
 });
