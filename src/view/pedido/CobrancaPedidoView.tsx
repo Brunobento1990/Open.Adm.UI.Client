@@ -15,7 +15,6 @@ import { ICobrarPedido, ICobrarPedidoResponse } from '@/types/CobrarPedido';
 import { IPedidoCobranca } from '@/types/Pedido';
 import { formatMoney } from '@/utils/FormatMoney';
 import { useContext, useEffect, useState } from 'react';
-import { CardsCobranca } from './TipoCobrancaForm';
 import { ModalPix } from '@/components/Modal/ModalPix';
 
 export function CobrancaPedidoView() {
@@ -48,8 +47,6 @@ export function CobrancaPedidoView() {
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const CardCobranca = CardsCobranca[form.values.meioDePagamento];
 
   return (
     <>
@@ -95,7 +92,6 @@ export function CobrancaPedidoView() {
             error={form.error('meioDePagamento')}
             helperText={form.helperText('meioDePagamento')}
           />
-          {CardCobranca && <CardCobranca cobranca={cobranca} />}
         </BoxApp>
       </FormApp>
     </>
