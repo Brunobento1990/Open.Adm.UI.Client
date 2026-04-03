@@ -1,19 +1,20 @@
-"use client";
+'use client';
 
-import { useFormikAdapter } from "@/adapters/FormikAdapter";
-import { BoxApp } from "@/components/Box/BoxApp";
-import { Button } from "@/components/Button/ButtonApp";
-import { InputApp, MaskType } from "@/components/Input/InputApp";
-import { TextApp } from "@/components/Text/TextApp";
-import { rotas } from "@/config/ConfigRotas";
-import { useNavigateApp } from "@/hooks/UseNavigateApp";
-import { useThemeApp } from "@/hooks/UseThemeApp";
-import { initialValues, schemaValidacao } from "./Configuracao";
-import { useLoginApi } from "@/api/UseLoginApi";
-import { useContext, useState } from "react";
-import { clearMaskCpfCnpj } from "@/utils/MaskCpfCnpj";
-import { AppAuthContext } from "@/context/AppAuthContext";
-import { useAppParceiroContext } from "@/context/AppParceiroContext";
+import { useFormikAdapter } from '@/adapters/FormikAdapter';
+import { BoxApp } from '@/components/Box/BoxApp';
+import { Button } from '@/components/Button/ButtonApp';
+import { InputApp, MaskType } from '@/components/Input/InputApp';
+import { TextApp } from '@/components/Text/TextApp';
+import { rotas } from '@/config/ConfigRotas';
+import { useNavigateApp } from '@/hooks/UseNavigateApp';
+import { useThemeApp } from '@/hooks/UseThemeApp';
+import { initialValues, schemaValidacao } from './Configuracao';
+import { useLoginApi } from '@/api/UseLoginApi';
+import { useContext } from 'react';
+import { clearMaskCpfCnpj } from '@/utils/MaskCpfCnpj';
+import { AppAuthContext } from '@/context/AppAuthContext';
+import { useAppParceiroContext } from '@/context/AppParceiroContext';
+import GoogleLogin from '@/components/Button/LoginComGoogleApp';
 
 export function ViewLogin() {
   const { shadow, borderRadius } = useThemeApp();
@@ -54,7 +55,7 @@ export function ViewLogin() {
         height="calc(100vh - 100px)"
       >
         <TextApp
-          titulo={`Bem vindo a ${parceiro?.nomeFantasia ?? ""}! 👋🏻`}
+          titulo={`Bem vindo a ${parceiro?.nomeFantasia ?? ''}! 👋🏻`}
           fontSize="18px"
           fontWeight={600}
         />
@@ -75,8 +76,8 @@ export function ViewLogin() {
             mask={MaskType.CPFCNPJ}
             onChange={form.onChange}
             onBlur={form.onBlur}
-            error={form.error("cpfCnpj")}
-            helperText={form.helperText("cpfCnpj")}
+            error={form.error('cpfCnpj')}
+            helperText={form.helperText('cpfCnpj')}
             value={form.values.cpfCnpj}
             required
           />
@@ -85,8 +86,8 @@ export function ViewLogin() {
             onChange={form.onChange}
             onBlur={form.onBlur}
             maxLength={20}
-            error={form.error("senha")}
-            helperText={form.helperText("senha")}
+            error={form.error('senha')}
+            helperText={form.helperText('senha')}
             value={form.values.senha}
             fullWidth
             id="senha"
@@ -95,10 +96,7 @@ export function ViewLogin() {
           />
         </BoxApp>
         <BoxApp>
-          <Button
-            title="Esqueceu sua senha?"
-            onClick={() => navigate(rotas.esqueceuSenha)}
-          />
+          <Button title="Esqueceu sua senha?" onClick={() => navigate(rotas.esqueceuSenha)} />
         </BoxApp>
         <BoxApp
           display="flex"
@@ -111,11 +109,12 @@ export function ViewLogin() {
           <Button
             fullWidth
             title="Login"
-            loading={login.status === "loading"}
+            loading={login.status === 'loading'}
             type="submit"
             variant="contained"
             onClick={form.onSubmit}
           />
+          <GoogleLogin />
           <Button
             onClick={() => navigate(rotas.home)}
             fullWidth
@@ -123,18 +122,9 @@ export function ViewLogin() {
             variant="text"
           />
         </BoxApp>
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          width="100%"
-          gap="1rem"
-        >
+        <BoxApp display="flex" alignItems="center" justifyContent="center" width="100%" gap="1rem">
           <TextApp titulo="Ainda não tem conta?" />
-          <Button
-            title="Clique aqui!"
-            onClick={() => navigate(rotas.criarUsuario)}
-          />
+          <Button title="Clique aqui!" onClick={() => navigate(rotas.criarUsuario)} />
         </BoxApp>
       </BoxApp>
     </form>

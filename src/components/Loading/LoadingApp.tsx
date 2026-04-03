@@ -1,7 +1,7 @@
-import { FadeLoader } from "react-spinners";
-import { BoxApp } from "../Box/BoxApp";
-import { TextApp } from "../Text/TextApp";
-import { flexDirection } from "../Box/types";
+import { FadeLoader } from 'react-spinners';
+import { BoxApp } from '../Box/BoxApp';
+import { TextApp } from '../Text/TextApp';
+import { flexDirection } from '../Box/types';
 
 interface propsLoadingApp {
   marginTop?: string;
@@ -9,22 +9,23 @@ interface propsLoadingApp {
   width?: string;
   texto?: string;
   flexDirection?: flexDirection;
+  size?: number;
 }
 
 export function LoadingApp(props: propsLoadingApp) {
   return (
     <BoxApp
-      width={props.width ?? "100%"}
-      height={props.height ?? "100%"}
+      width={props.width ?? '100%'}
+      height={props.height ?? '100%'}
       display="flex"
       alignItems="center"
       justifyContent="center"
-      flexDirection={props.flexDirection ?? "column"}
+      flexDirection={props.flexDirection ?? 'column'}
       gap="1rem"
       marginTop={props.marginTop}
     >
       <FadeLoader />
-      <TextApp titulo={props.texto ?? "Carregando..."} />
+      <TextApp titulo={props.texto ?? 'Carregando...'} />
     </BoxApp>
   );
 }
