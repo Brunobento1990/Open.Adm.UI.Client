@@ -1,95 +1,47 @@
-"use client";
+'use client';
 
-import { useFormikAdapter } from "@/adapters/FormikAdapter";
-import { BoxApp } from "@/components/Box/BoxApp";
-import { Button } from "@/components/Button/ButtonApp";
-import { rotas } from "@/config/ConfigRotas";
-import { useNavigateApp } from "@/hooks/UseNavigateApp";
-import { IUsuarioCreate } from "@/types/Usuario";
-import { useContext, useState } from "react";
-import { initialValues, schema, tiposPessoa } from "./Configuracao";
-import { InputApp, MaskType } from "@/components/Input/InputApp";
-import { TextApp } from "@/components/Text/TextApp";
-import SelectApp from "@/components/Select/SelectApp";
-import { GridApp } from "@/components/Grid/GridApp";
-import { clearMaskCpfCnpj, clearMaskPhone } from "@/utils/MaskCpfCnpj";
-import { useClienteApi } from "@/api/UseClienteApi";
-import { AppAuthContext } from "@/context/AppAuthContext";
-import { useSnackbar } from "@/components/SnackBar/UseSnackBar";
-import { useCnpjApi } from "@/api/UseCnpjApi";
+import { useFormikAdapter } from '@/adapters/FormikAdapter';
+import { BoxApp } from '@/components/Box/BoxApp';
+import { Button } from '@/components/Button/ButtonApp';
+import { rotas } from '@/config/ConfigRotas';
+import { useNavigateApp } from '@/hooks/UseNavigateApp';
+import { IUsuarioCreate } from '@/types/Usuario';
+import { useContext } from 'react';
+import { initialValues, schema, tiposPessoa } from './Configuracao';
+import { InputApp, MaskType } from '@/components/Input/InputApp';
+import { TextApp } from '@/components/Text/TextApp';
+import SelectApp from '@/components/Select/SelectApp';
+import { GridApp } from '@/components/Grid/GridApp';
+import { clearMaskCpfCnpj, clearMaskPhone } from '@/utils/MaskCpfCnpj';
+import { useClienteApi } from '@/api/UseClienteApi';
+import { AppAuthContext } from '@/context/AppAuthContext';
+import { useThemeApp } from '@/hooks/UseThemeApp';
 
 export function FormUsuario() {
-  const [tipoPessoa, setTipoPessoa] = useState(1);
   const { criarUsuario } = useClienteApi();
   const { navigate } = useNavigateApp();
-  const { consultarCnpj } = useCnpjApi();
-  const { show } = useSnackbar();
+  const { borderRadius, cores } = useThemeApp();
   const { logar } = useContext(AppAuthContext);
-  const isJuridico = tipoPessoa === 1;
   const form = useFormikAdapter<IUsuarioCreate>({
     initialValues: initialValues,
     validationSchema: schema,
     onSubmit: submit,
   });
 
+  const isJuridico = form.values.tipoPessoa === 1;
+
   async function submit() {
-    if (!form.values.validouCnpj && tipoPessoa === 1) {
-      show("É necessário validar seu CNPJ", "error");
-      return;
-    }
-
-    const body = {
+    const response = await criarUsuario.fetch({
       ...form.values,
-      telefone: clearMaskPhone(form.values.telefone),
-      cpf: clearMaskCpfCnpj(form.values.cpf),
-      cnpj: clearMaskCpfCnpj(form.values.cpf),
-      tipoPessoa,
-    };
-    const response = await criarUsuario.fetch(body as any);
-
+      telefone: clearMaskPhone(form.values.telefone) ?? '',
+      cpf: clearMaskCpfCnpj(form.values.cpf) ?? '',
+      cnpj: clearMaskCpfCnpj(form.values.cpf) ?? '',
+    } as any);
     if (response) {
-      navigate(rotas.cadastroRealizado);
+      logar(response);
+      navigate(rotas.home);
       return;
     }
-  }
-
-  async function validarCnpj() {
-    if (!form.values.cpf) {
-      show("Informe se CNPJ", "error");
-      return;
-    }
-
-    const cnpj = clearMaskCpfCnpj(form.values.cpf) ?? "";
-
-    if (!cnpj) {
-      return;
-    }
-
-    const response = await consultarCnpj.fetch(cnpj);
-    if (!response) {
-      return;
-    }
-
-    if (response.descricao_situacao_cadastral !== "ATIVA") {
-      show("CNPJ inativo!", "error");
-      return;
-    }
-
-    if (!response.cnae_fiscal_descricao?.toLowerCase().includes("pesca")) {
-      const cnaesSecundarios = response.cnaes_secundarios.find((x) =>
-        x.descricao.toLowerCase().includes("pesca")
-      );
-      if (!cnaesSecundarios) {
-        show("CNPJ inválido!", "error");
-        return;
-      }
-    }
-
-    show("CNPJ validado com sucesso!", "success");
-    form.setValue({
-      validouCnpj: true,
-      nome: response.nome_fantasia,
-    });
   }
 
   return (
@@ -104,51 +56,42 @@ export function FormUsuario() {
         marginTop="1rem"
         height="calc(100vh - 30px)"
         width="calc(100vw - 2rem)"
+        maxHeight="750px"
         overflowy="auto"
+        maxWidth="750px"
+        border={`1px solid ${cores.divider}`}
+        borderRadius={borderRadius}
       >
-        <TextApp
-          titulo="Cadastre-se agora 🚀"
-          fontSize="18px"
-          fontWeight={600}
-        />
+        <TextApp titulo="Cadastre-se agora 🚀" fontSize="18px" fontWeight={600} />
         <TextApp titulo="Faça suas compras fácil e rápido!" />
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          gap="1rem"
-        >
+        <BoxApp display="flex" alignItems="center" justifyContent="center" gap="1rem">
           <SelectApp
             keyDescricao="descricao"
             keyValue="id"
-            value={tipoPessoa}
-            onChange={(value) => setTipoPessoa(value)}
+            value={form.values.tipoPessoa}
+            onChange={(value) =>
+              form.setValue({
+                tipoPessoa: value,
+              })
+            }
             label="Tipo pessoa"
             id="tipoPessoa"
             opcoes={tiposPessoa}
           />
-          {isJuridico && (
-            <Button
-              variant="contained"
-              title="validar CNPJ"
-              onClick={validarCnpj}
-              loading={consultarCnpj.status === "loading"}
-            />
-          )}
         </BoxApp>
         <GridApp container spacing={3}>
           <GridApp xs={12} sm={6}>
             <InputApp
               fullWidth
               id="cpf"
-              label={isJuridico ? "CNPJ" : "CPF"}
+              label={isJuridico ? 'CNPJ' : 'CPF'}
               maxLength={255}
               mask={isJuridico ? MaskType.CNPJ : MaskType.CPF}
               onChange={form.onChange}
               onBlur={form.onBlur}
               value={form.values.cpf}
-              error={form.error("cpf")}
-              helperText={form.helperText("cpf")}
+              error={form.error('cpf')}
+              helperText={form.helperText('cpf')}
               required
             />
           </GridApp>
@@ -161,8 +104,8 @@ export function FormUsuario() {
               type="email"
               onChange={form.onChange}
               onBlur={form.onBlur}
-              error={form.error("email")}
-              helperText={form.helperText("email")}
+              error={form.error('email')}
+              helperText={form.helperText('email')}
               value={form.values.email}
               required
             />
@@ -175,8 +118,8 @@ export function FormUsuario() {
               maxLength={255}
               onChange={form.onChange}
               onBlur={form.onBlur}
-              error={form.error("nome")}
-              helperText={form.helperText("nome")}
+              error={form.error('nome')}
+              helperText={form.helperText('nome')}
               value={form.values.nome}
               required
             />
@@ -189,8 +132,8 @@ export function FormUsuario() {
               mask={MaskType.TELEFONE}
               onChange={form.onChange}
               onBlur={form.onBlur}
-              error={form.error("telefone")}
-              helperText={form.helperText("telefone")}
+              error={form.error('telefone')}
+              helperText={form.helperText('telefone')}
               value={form.values.telefone}
               required
             />
@@ -203,8 +146,8 @@ export function FormUsuario() {
               isPassword
               onChange={form.onChange}
               onBlur={form.onBlur}
-              error={form.error("senha")}
-              helperText={form.helperText("senha")}
+              error={form.error('senha')}
+              helperText={form.helperText('senha')}
               value={form.values.senha}
               required
             />
@@ -217,8 +160,8 @@ export function FormUsuario() {
               isPassword
               onChange={form.onChange}
               onBlur={form.onBlur}
-              error={form.error("reSenha")}
-              helperText={form.helperText("reSenha")}
+              error={form.error('reSenha')}
+              helperText={form.helperText('reSenha')}
               value={form.values.reSenha}
               required
             />
@@ -234,7 +177,7 @@ export function FormUsuario() {
           maxWidth="170px"
         >
           <Button
-            loading={criarUsuario.status === "loading"}
+            loading={criarUsuario.status === 'loading'}
             type="submit"
             width="100%"
             variant="contained"
