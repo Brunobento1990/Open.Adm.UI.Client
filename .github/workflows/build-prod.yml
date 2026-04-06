@@ -27,6 +27,7 @@ jobs:
           cat > .env.production <<EOF
           NEXT_PUBLIC_URL_API=${{ secrets.URL_API }}
           NEXT_PUBLIC_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
           EOF
 
       - uses: docker/login-action@v3
