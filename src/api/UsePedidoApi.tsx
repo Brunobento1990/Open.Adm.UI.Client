@@ -1,36 +1,57 @@
-import { useApi } from "@/hooks/UseApi";
-import { IPedidoMinimo } from "@/types/PedidoMinimo";
-import { pedidoRotasApi } from "./rotas/PedidoRotasApi";
-import { ICreatePedido } from "@/types/CreatePedido";
-import { IPedido, StatusPedido } from "@/types/Pedido";
+import { useApi } from '@/hooks/UseApi';
+import { IPedidoMinimo, ITodasConfiguracoesDePedido } from '@/types/PedidoMinimo';
+import { pedidoRotasApi } from './rotas/PedidoRotasApi';
+import { ICreatePedido, ICreatePedidoResponse } from '@/types/CreatePedido';
+import { IPedido, IPedidoCobranca, StatusPedido } from '@/types/Pedido';
+import { ICobrarPedido, ICobrarPedidoResponse } from '@/types/CobrarPedido';
 
 export function UsePedidoApi() {
   const apiPedidoMinimo = useApi({
-    method: "GET",
+    method: 'GET',
     url: pedidoRotasApi.pedidoMinimo,
     naoRenderizarErro: true,
     naoRenderizarResposta: true,
   });
 
+  const apiTodasConfiguracoesDePedido = useApi({
+    method: 'GET',
+    url: pedidoRotasApi.todasConfiguracoesDePedido,
+    naoRenderizarErro: true,
+    naoRenderizarResposta: true,
+  });
+
   const apiPedidoStatus = useApi({
-    method: "GET",
+    method: 'GET',
     url: pedidoRotasApi.pedidoStatus,
-    statusInicial: "loading",
+    statusInicial: 'loading',
   });
 
   const apiPedidoId = useApi({
-    method: "GET",
+    method: 'GET',
     url: pedidoRotasApi.pedidoId,
-    statusInicial: "loading",
+    statusInicial: 'loading',
+  });
+
+  const apiPedidoParaGerarCobranca = useApi({
+    method: 'GET',
+    url: pedidoRotasApi.paraGerarCobranca,
+    statusInicial: 'loading',
+  });
+
+  const apiPedidoGerarCobranca = useApi({
+    method: 'POST',
+    url: pedidoRotasApi.gerarCobranca,
+    naoRenderizarResposta: true,
   });
 
   const apiPedidoCreate = useApi({
-    method: "POST",
+    method: 'POST',
     url: pedidoRotasApi.createPedido,
+    naoRenderizarResposta: true,
   });
 
   const apiPedidoCancelar = useApi({
-    method: "PUT",
+    method: 'PUT',
     url: pedidoRotasApi.cancelarPedido,
   });
 
@@ -38,16 +59,19 @@ export function UsePedidoApi() {
     return await apiPedidoMinimo.action();
   }
 
-  async function criarPedido(body: ICreatePedido): Promise<any> {
+  async function obterTodasConfiguracoesDePedido(): Promise<
+    ITodasConfiguracoesDePedido | undefined
+  > {
+    return await apiTodasConfiguracoesDePedido.action();
+  }
+
+  async function criarPedido(body: ICreatePedido): Promise<ICreatePedidoResponse | undefined> {
     return await apiPedidoCreate.action({
       body,
-      message: "Pedido criado com sucesso!",
     });
   }
 
-  async function obterPorStatus(
-    statusPedido: StatusPedido
-  ): Promise<IPedido[] | undefined> {
+  async function obterPorStatus(statusPedido: StatusPedido): Promise<IPedido[] | undefined> {
     return await apiPedidoStatus.action({ urlParams: `${statusPedido}` });
   }
 
@@ -55,10 +79,20 @@ export function UsePedidoApi() {
     return await apiPedidoId.action({ urlParams: `${pedidoId}` });
   }
 
+  async function obterParaGerarCobranca(pedidoId: string): Promise<IPedidoCobranca | undefined> {
+    return await apiPedidoParaGerarCobranca.action({ urlParams: `${pedidoId}` });
+  }
+
+  async function gerarCobranca(body: ICobrarPedido): Promise<ICobrarPedidoResponse | undefined> {
+    return await apiPedidoGerarCobranca.action({
+      body,
+    });
+  }
+
   async function cancelarPedido(body: any): Promise<any> {
     return await apiPedidoCancelar.action({
       body,
-      message: "Pedido cancelado com sucesso!",
+      message: 'Pedido cancelado com sucesso!',
     });
   }
 
@@ -82,6 +116,18 @@ export function UsePedidoApi() {
     cancelarPedido: {
       fetch: cancelarPedido,
       status: apiPedidoCancelar.status,
+    },
+    obterTodasConfiguracoesDePedido: {
+      fetch: obterTodasConfiguracoesDePedido,
+      status: apiTodasConfiguracoesDePedido.status,
+    },
+    obterParaGerarCobranca: {
+      fetch: obterParaGerarCobranca,
+      loading: apiPedidoParaGerarCobranca.loading,
+    },
+    gerarCobranca: {
+      fetch: gerarCobranca,
+      loading: apiPedidoGerarCobranca.loading,
     },
   };
 }

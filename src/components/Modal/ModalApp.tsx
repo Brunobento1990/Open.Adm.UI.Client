@@ -1,11 +1,12 @@
-import { IconButton } from "@mui/material";
+import { IconButton, Slide, styled } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 import { IconApp } from "../Icon/IconApp";
 import { listaDeIcones } from "@/config/ListaDeIcones";
 import { useAppParceiroContext } from "@/context/AppParceiroContext";
+import { TransitionProps } from "@mui/material/transitions";
 
 interface propsModalApp {
   open: boolean;
@@ -15,14 +16,35 @@ interface propsModalApp {
   maxWidth?: "lg" | "md" | "sm" | "xl" | "xs";
 }
 
+export const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction='down' ref={ref} {...props} />;
+});
+
+export const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
+
 export default function ModalApp(props: propsModalApp) {
   const { parceiro } = useAppParceiroContext();
   return (
-    <Dialog
+    <BootstrapDialog
       maxWidth={props.maxWidth}
       fullWidth={props.fullWidth}
       open={props.open}
       onClose={props.close}
+      slots={{
+        transition: Transition
+      }}
     >
       <DialogTitle>{parceiro?.nomeFantasia ?? ""}</DialogTitle>
       <IconButton
@@ -38,6 +60,6 @@ export default function ModalApp(props: propsModalApp) {
         <IconApp icon={listaDeIcones.close} />
       </IconButton>
       <DialogContent>{props.children}</DialogContent>
-    </Dialog>
+    </BootstrapDialog>
   );
 }
