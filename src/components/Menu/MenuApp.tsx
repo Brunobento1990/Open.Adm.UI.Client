@@ -1,17 +1,11 @@
-import Drawer from "@mui/material/Drawer";
-import { BoxApp } from "../Box/BoxApp";
-import { listaDeIcones } from "@/config/ListaDeIcones";
-import { IconButtonApp } from "../Icon/IconButtonApp";
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import { IconApp } from "../Icon/IconApp";
-import { useNavigateApp } from "@/hooks/UseNavigateApp";
-import { rotas } from "@/config/ConfigRotas";
+import Drawer from '@mui/material/Drawer';
+import { BoxApp } from '../Box/BoxApp';
+import { listaDeIcones } from '@/config/ListaDeIcones';
+import { IconButtonApp } from '../Icon/IconButtonApp';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { IconApp } from '../Icon/IconApp';
+import { useNavigateApp } from '@/hooks/UseNavigateApp';
+import { rotas } from '@/config/ConfigRotas';
 
 interface propsMenuApp {
   open: boolean;
@@ -29,12 +23,7 @@ export function MenuApp(props: propsMenuApp) {
   return (
     <Drawer open={props.open} onClose={props.close}>
       <BoxApp width="250px">
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="end"
-          padding=".5rem"
-        >
+        <BoxApp display="flex" alignItems="center" justifyContent="end" padding=".5rem">
           <IconButtonApp icon={listaDeIcones.close} onClick={props.close} />
         </BoxApp>
         <BoxApp>
@@ -61,14 +50,6 @@ export function MenuApp(props: propsMenuApp) {
                   <IconApp icon={listaDeIcones.produto} />
                 </ListItemIcon>
                 <ListItemText primary="Produtos" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => navegarMenu(rotas.lojaParceira)}>
-                <ListItemIcon>
-                  <IconApp icon={listaDeIcones.lojaParceia} />
-                </ListItemIcon>
-                <ListItemText primary="Lojas parceiras" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
