@@ -209,6 +209,7 @@ export function CardProduto(props: propsCardProduto) {
                   key={peso.id}
                   precoProduto={peso.precoProduto}
                   onBlur={onBlur}
+                  quantidadeEstoqueDisponivel={peso.quantidade}
                   temEstoqueDisponivel={peso.temEstoqueDisponivel}
                 />
               ))}
@@ -231,6 +232,7 @@ export function CardProduto(props: propsCardProduto) {
                   id={tamanho.id}
                   onChange={(value) => onChangeTamanho(index, value)}
                   key={tamanho.id}
+                  quantidadeEstoqueDisponivel={tamanho.quantidade}
                   descricao={tamanho.descricao}
                   mostrarValorUnitario={props.mostrarValorUnitario}
                   precoProduto={tamanho.precoProduto}
