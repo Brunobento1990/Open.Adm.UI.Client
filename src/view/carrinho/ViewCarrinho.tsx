@@ -1,27 +1,22 @@
-"use client";
+'use client';
 
-import { BoxApp } from "@/components/Box/BoxApp";
-import { Button } from "@/components/Button/ButtonApp";
-import { CardProduto } from "@/components/CardProduto/CardProduto";
-import { GridApp } from "@/components/Grid/GridApp";
-import { LoadingApp } from "@/components/Loading/LoadingApp";
-import { TextApp } from "@/components/Text/TextApp";
-import { rotas } from "@/config/ConfigRotas";
-import { listaDeIcones } from "@/config/ListaDeIcones";
-import { AppCarrinhoContext } from "@/context/AppCarrinhoContext";
-import { useNavigateApp } from "@/hooks/UseNavigateApp";
-import { useContext, useEffect } from "react";
-import { ViewResumoCarrinho } from "./ViewResumoCarrinho";
-import { IProduto } from "@/types/Produto";
+import { BoxApp } from '@/components/Box/BoxApp';
+import { Button } from '@/components/Button/ButtonApp';
+import { CardProduto } from '@/components/CardProduto/CardProduto';
+import { GridApp } from '@/components/Grid/GridApp';
+import { LoadingApp } from '@/components/Loading/LoadingApp';
+import { TextApp } from '@/components/Text/TextApp';
+import { rotas } from '@/config/ConfigRotas';
+import { listaDeIcones } from '@/config/ListaDeIcones';
+import { AppCarrinhoContext } from '@/context/AppCarrinhoContext';
+import { useNavigateApp } from '@/hooks/UseNavigateApp';
+import { useContext, useEffect } from 'react';
+import { ViewResumoCarrinho } from './ViewResumoCarrinho';
+import { IProduto } from '@/types/Produto';
 
 export function ViewCarrinho() {
-  const {
-    quantidadeItensCarrinho,
-    obterProdutos,
-    produtos,
-    statusObterItens,
-    setProdutos,
-  } = useContext(AppCarrinhoContext);
+  const { quantidadeItensCarrinho, obterProdutos, produtos, statusObterItens, setProdutos } =
+    useContext(AppCarrinhoContext);
   const { navigate } = useNavigateApp();
 
   function editarProduto(index: number, produto: IProduto) {
@@ -34,26 +29,16 @@ export function ViewCarrinho() {
     obterProdutos();
   }, []);
 
-
   if (!quantidadeItensCarrinho || produtos.length === 0) {
     return (
       <BoxApp marginTop="1rem" padding="1rem" height="calc(100vh - 300px)">
-        {statusObterItens === "loading" ? (
-
-          < LoadingApp height="350px" />
+        {statusObterItens === 'loading' ? (
+          <LoadingApp height="350px" />
         ) : (
           <>
-            <TextApp
-              titulo="Carrinho"
-              fontSize="18px"
-              fontWeight={600}
-              marginBotton="1rem"
-            />
+            <TextApp titulo="Carrinho" fontSize="18px" fontWeight={600} marginBotton="1rem" />
             <TextApp titulo="Você não tem nada no seu carrinho. Vamos mudar isso, use o link abaixo para" />
-            <TextApp
-              titulo="começar a navegar pelos nossos produtos."
-              marginBotton="1rem"
-            />
+            <TextApp titulo="começar a navegar pelos nossos produtos." marginBotton="1rem" />
             <Button
               endIcon={listaDeIcones.flechaDireita}
               onClick={() => navigate(rotas.produto)}
@@ -79,7 +64,6 @@ export function ViewCarrinho() {
           >
             {produtos.map((produto, index) => (
               <CardProduto
-                mostrarValorUnitario
                 desabilitarBtnAddCarrinho
                 key={produto.id}
                 produto={produto}

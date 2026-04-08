@@ -1,27 +1,26 @@
-"use client";
+'use client';
 
-import { useListarCategoriasApi } from "@/api/UseListarCategoriasApi";
-import { usePesoApi } from "@/api/UsePesoTamanho";
-import { useProdutoApi } from "@/api/UseProdutoApi";
-import { useTamanhoApi } from "@/api/UseTamanhoApi";
-import { BoxApp } from "@/components/Box/BoxApp";
-import { Button } from "@/components/Button/ButtonApp";
-import { CardProduto } from "@/components/CardProduto/CardProduto";
-import { GridApp } from "@/components/Grid/GridApp";
-import { IconButtonTooltipApp } from "@/components/Icon/IconButtonTooltipApp";
-import { LoadingApp } from "@/components/Loading/LoadingApp";
-import ModalApp from "@/components/Modal/ModalApp";
-import SelectApp from "@/components/Select/SelectApp";
-import { TextApp } from "@/components/Text/TextApp";
-import { listaDeIcones } from "@/config/ListaDeIcones";
-import { AppAuthContext } from "@/context/AppAuthContext";
-import { useThemeApp } from "@/hooks/UseThemeApp";
-import { IPaginacaoResponse } from "@/types/PaginacaoResponse";
-import { IPeso } from "@/types/Peso";
-import { IProduto } from "@/types/Produto";
-import { ITamanhos } from "@/types/Tamanho";
-import { Pagination } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useListarCategoriasApi } from '@/api/UseListarCategoriasApi';
+import { usePesoApi } from '@/api/UsePesoTamanho';
+import { useProdutoApi } from '@/api/UseProdutoApi';
+import { useTamanhoApi } from '@/api/UseTamanhoApi';
+import { BoxApp } from '@/components/Box/BoxApp';
+import { Button } from '@/components/Button/ButtonApp';
+import { CardProduto } from '@/components/CardProduto/CardProduto';
+import { GridApp } from '@/components/Grid/GridApp';
+import { IconButtonTooltipApp } from '@/components/Icon/IconButtonTooltipApp';
+import { LoadingApp } from '@/components/Loading/LoadingApp';
+import ModalApp from '@/components/Modal/ModalApp';
+import SelectApp from '@/components/Select/SelectApp';
+import { TextApp } from '@/components/Text/TextApp';
+import { listaDeIcones } from '@/config/ListaDeIcones';
+import { useThemeApp } from '@/hooks/UseThemeApp';
+import { IPaginacaoResponse } from '@/types/PaginacaoResponse';
+import { IPeso } from '@/types/Peso';
+import { IProduto } from '@/types/Produto';
+import { ITamanhos } from '@/types/Tamanho';
+import { Pagination } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 export function ViewProduto() {
   const { paginacaoProduto } = useProdutoApi();
@@ -31,12 +30,11 @@ export function ViewProduto() {
   const { isMobile } = useThemeApp();
   const [pagina, setPagina] = useState(1);
   const [openModal, setOpenModal] = useState(false);
-  const [categoria, setCategoria] = useState<string>("");
+  const [categoria, setCategoria] = useState<string>('');
   const [pesos, setPesos] = useState<IPeso[]>([]);
-  const [peso, setPeso] = useState<string>("");
+  const [peso, setPeso] = useState<string>('');
   const [tamanhos, setTamanhos] = useState<ITamanhos[]>([]);
-  const [tamanho, setTamanho] = useState<string>("");
-  const { usuario } = useContext(AppAuthContext);
+  const [tamanho, setTamanho] = useState<string>('');
   const [paginacao, setPaginacao] = useState<IPaginacaoResponse<IProduto>>({
     totalDeRegistros: 0,
     totalPaginas: 0,
@@ -79,14 +77,14 @@ export function ViewProduto() {
     init();
   }, [pagina]);
 
-  if (paginacao.values.length === 0 && paginacaoProduto.status !== "loading") {
+  if (paginacao.values.length === 0 && paginacaoProduto.status !== 'loading') {
     return <></>;
   }
 
   return (
     <>
       <BoxApp padding="1rem">
-        {paginacaoProduto.status === "loading" ? (
+        {paginacaoProduto.status === 'loading' ? (
           <LoadingApp />
         ) : (
           <>
@@ -97,7 +95,7 @@ export function ViewProduto() {
               padding="1rem"
               gap="1rem"
             >
-              <TextApp fontSize="20px" fontWeight={600} titulo={"Produtos"} />
+              <TextApp fontSize="20px" fontWeight={600} titulo={'Produtos'} />
               <IconButtonTooltipApp
                 onClick={carregarFiltros}
                 icon={listaDeIcones.filtro}
@@ -107,19 +105,11 @@ export function ViewProduto() {
             <GridApp container spacing={3}>
               {paginacao.values.map((produto) => (
                 <GridApp key={produto.id} xs={12} sm={6}>
-                  <CardProduto
-                    mostrarValorUnitario={usuario !== undefined}
-                    produto={produto}
-                  />
+                  <CardProduto produto={produto} />
                 </GridApp>
               ))}
             </GridApp>
-            <BoxApp
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              padding="1rem"
-            >
+            <BoxApp display="flex" alignItems="center" justifyContent="center" padding="1rem">
               <Pagination
                 count={paginacao.totalPaginas}
                 page={pagina}
@@ -132,14 +122,14 @@ export function ViewProduto() {
         )}
       </BoxApp>
       <ModalApp close={() => setOpenModal(false)} open={openModal}>
-        {listarPesos.status === "loading" ||
-        listarTamanhos.status === "loading" ||
-        listarCategorias.status === "loading" ? (
+        {listarPesos.status === 'loading' ||
+        listarTamanhos.status === 'loading' ||
+        listarCategorias.status === 'loading' ? (
           <LoadingApp width="350px" height="300px" marginTop="1rem" />
         ) : (
           <form>
             <BoxApp
-              width={isMobile ? "calc(100vw - 120px)" : "350px"}
+              width={isMobile ? 'calc(100vw - 120px)' : '350px'}
               display="flex"
               alignItems="center"
               justifyContent="center"

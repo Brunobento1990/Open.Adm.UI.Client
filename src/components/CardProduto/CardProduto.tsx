@@ -1,15 +1,15 @@
-import { IProduto } from "@/types/Produto";
-import { BoxApp } from "../Box/BoxApp";
-import { TextApp } from "../Text/TextApp";
-import { listaDeIcones } from "@/config/ListaDeIcones";
-import { Button } from "../Button/ButtonApp";
-import { CardFoto } from "./CardFoto";
-import { useThemeApp } from "@/hooks/UseThemeApp";
-import { CardPesoTamanho } from "./CardPesoTamanho";
-import { useContext, useState } from "react";
-import { AppCarrinhoContext } from "@/context/AppCarrinhoContext";
-import { cleanFormatMoney } from "@/utils/FormatMoney";
-import { useSnackbar } from "../SnackBar/UseSnackBar";
+import { IProduto } from '@/types/Produto';
+import { BoxApp } from '../Box/BoxApp';
+import { TextApp } from '../Text/TextApp';
+import { listaDeIcones } from '@/config/ListaDeIcones';
+import { Button } from '../Button/ButtonApp';
+import { CardFoto } from './CardFoto';
+import { useThemeApp } from '@/hooks/UseThemeApp';
+import { CardPesoTamanho } from './CardPesoTamanho';
+import { useContext, useState } from 'react';
+import { AppCarrinhoContext } from '@/context/AppCarrinhoContext';
+import { cleanFormatMoney } from '@/utils/FormatMoney';
+import { useSnackbar } from '../SnackBar/UseSnackBar';
 
 interface propsCardProduto {
   produto: IProduto;
@@ -17,20 +17,15 @@ interface propsCardProduto {
   onBlur?: (produto: IProduto) => void;
   habilitarExclusaoProduto?: boolean;
   index?: number;
-  mostrarValorUnitario: boolean;
 }
 
 export function CardProduto(props: propsCardProduto) {
   const [produto, setProduto] = useState(props.produto);
   const { show } = useSnackbar();
-  const {
-    adicionarItens,
-    statusAdicionar,
-    excluirProdutoCarrinho,
-    statusExcluirItem,
-  } = useContext(AppCarrinhoContext);
+  const { adicionarItens, statusAdicionar, excluirProdutoCarrinho, statusExcluirItem } =
+    useContext(AppCarrinhoContext);
   const { backgroundColor, borderRadius, isMobile } = useThemeApp();
-  const width = isMobile ? "100%" : "50%";
+  const width = isMobile ? '100%' : '50%';
 
   function onChangePeso(index: number, qtd?: number) {
     if (
@@ -38,10 +33,7 @@ export function CardProduto(props: propsCardProduto) {
       produto.pesos[index].quantidade &&
       Number(qtd) > produto.pesos[index].quantidade
     ) {
-      show(
-        `Quantidade disponível: ${produto.pesos[index].quantidade}.`,
-        "info"
-      );
+      show(`Quantidade disponível: ${produto.pesos[index].quantidade}.`, 'info');
       return;
     }
 
@@ -61,10 +53,7 @@ export function CardProduto(props: propsCardProduto) {
       produto.tamanhos[index].quantidade &&
       Number(qtd) > produto.tamanhos[index].quantidade
     ) {
-      show(
-        `Quantidade disponível: ${produto.tamanhos[index].quantidade}.`,
-        "info"
-      );
+      show(`Quantidade disponível: ${produto.tamanhos[index].quantidade}.`, 'info');
       return;
     }
 
@@ -146,12 +135,12 @@ export function CardProduto(props: propsCardProduto) {
       display="flex"
       boxShadow="rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;"
       hover={{
-        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px;",
+        boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;',
       }}
       borderRadius={borderRadius}
       padding="1rem"
       gap="1rem"
-      flexDirection={isMobile ? "column" : undefined}
+      flexDirection={isMobile ? 'column' : undefined}
     >
       <CardFoto
         width={width}
@@ -168,42 +157,23 @@ export function CardProduto(props: propsCardProduto) {
         width={width}
         height="100%"
       >
-        <BoxApp
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          width="100%"
-        >
-          <TextApp
-            titulo={produto.descricao}
-            fontSize="18px"
-            fontWeight={600}
-          />
-          <TextApp
-            fontSize="12px"
-            fontWeight={600}
-            titulo={`#${produto.referencia ?? ""}`}
-          />
+        <BoxApp display="flex" alignItems="center" justifyContent="space-between" width="100%">
+          <TextApp titulo={produto.descricao} fontSize="18px" fontWeight={600} />
+          <TextApp fontSize="12px" fontWeight={600} titulo={`#${produto.referencia ?? ''}`} />
         </BoxApp>
         <form
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           onSubmit={async (e) => {
             e.preventDefault();
             await adicionar();
           }}
         >
           {produto.pesos.length > 0 && (
-            <BoxApp
-              width="100%"
-              display="flex"
-              flexDirection="column"
-              gap=".5rem"
-            >
+            <BoxApp width="100%" display="flex" flexDirection="column" gap=".5rem">
               <TextApp titulo="Pesos disponíveis" marginBotton="1rem" />
               {produto.pesos.map((peso, index) => (
                 <CardPesoTamanho
                   id={peso.id}
-                  mostrarValorUnitario={props.mostrarValorUnitario}
                   onChange={(value) => onChangePeso(index, value)}
                   descricao={peso.descricao}
                   key={peso.id}
@@ -215,24 +185,14 @@ export function CardProduto(props: propsCardProduto) {
             </BoxApp>
           )}
           {produto.tamanhos.length > 0 && (
-            <BoxApp
-              width="100%"
-              display="flex"
-              flexDirection="column"
-              gap=".5rem"
-            >
-              <TextApp
-                fontSize="12px"
-                titulo="Tamanhos disponíveis"
-                marginBotton="1rem"
-              />
+            <BoxApp width="100%" display="flex" flexDirection="column" gap=".5rem">
+              <TextApp fontSize="12px" titulo="Tamanhos disponíveis" marginBotton="1rem" />
               {produto.tamanhos.map((tamanho, index) => (
                 <CardPesoTamanho
                   id={tamanho.id}
                   onChange={(value) => onChangeTamanho(index, value)}
                   key={tamanho.id}
                   descricao={tamanho.descricao}
-                  mostrarValorUnitario={props.mostrarValorUnitario}
                   precoProduto={tamanho.precoProduto}
                   onBlur={onBlur}
                   temEstoqueDisponivel={tamanho.temEstoqueDisponivel}
@@ -245,10 +205,10 @@ export function CardProduto(props: propsCardProduto) {
               <Button
                 onClick={adicionar}
                 endIcon={listaDeIcones.carrinho}
-                title={isMobile ? "Adicionar" : "Adicionar ao carrinho"}
+                title={isMobile ? 'Adicionar' : 'Adicionar ao carrinho'}
                 variant="contained"
                 width="100%"
-                loading={statusAdicionar === "loading"}
+                loading={statusAdicionar === 'loading'}
                 type="submit"
               />
             )}
@@ -256,11 +216,11 @@ export function CardProduto(props: propsCardProduto) {
               <Button
                 onClick={excluir}
                 endIcon={listaDeIcones.lixeira}
-                title={"Excluir"}
+                title={'Excluir'}
                 variant="outlined"
                 width="100%"
                 coricon="red"
-                loading={statusExcluirItem === "loading"}
+                loading={statusExcluirItem === 'loading'}
               />
             )}
           </BoxApp>

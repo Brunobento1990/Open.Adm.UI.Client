@@ -1,11 +1,11 @@
-import { IPrecoProduto } from "@/types/PrecoProduto";
-import { BoxApp } from "../Box/BoxApp";
-import { TextApp } from "../Text/TextApp";
-import { formatMoney } from "@/utils/FormatMoney";
-import { Badge, Chip } from "@mui/material";
-import { IconApp } from "../Icon/IconApp";
-import { listaDeIcones } from "@/config/ListaDeIcones";
-import { InputApp, MaskType } from "../Input/InputApp";
+import { IPrecoProduto } from '@/types/PrecoProduto';
+import { BoxApp } from '../Box/BoxApp';
+import { TextApp } from '../Text/TextApp';
+import { formatMoney } from '@/utils/FormatMoney';
+import { Badge, Chip } from '@mui/material';
+import { IconApp } from '../Icon/IconApp';
+import { listaDeIcones } from '@/config/ListaDeIcones';
+import { InputApp, MaskType } from '../Input/InputApp';
 
 interface propsCardPesoTamanho {
   descricao: string;
@@ -14,11 +14,9 @@ interface propsCardPesoTamanho {
   onChange: (qtd?: number) => void;
   onBlur?: () => void;
   temEstoqueDisponivel?: boolean;
-  mostrarValorUnitario: boolean;
 }
 
 export function CardPesoTamanho(props: propsCardPesoTamanho) {
-  const mostrarValorUnitario = props.mostrarValorUnitario && props.precoProduto;
   return (
     <BoxApp
       display="flex"
@@ -42,23 +40,23 @@ export function CardPesoTamanho(props: propsCardPesoTamanho) {
       ) : (
         <Chip
           sx={{
-            marginTop: ".3rem",
-            width: "110px",
+            marginTop: '.3rem',
+            width: '110px',
           }}
           color="error"
           size="small"
-          label={"Sem estoque"}
+          label={'Sem estoque'}
         />
       )}
-      {mostrarValorUnitario && (
+      {props.precoProduto && (
         <Chip
           sx={{
-            marginTop: ".3rem",
-            width: "100px",
+            marginTop: '.3rem',
+            width: '100px',
           }}
           size="small"
           icon={<IconApp icon={listaDeIcones.etiqueta} />}
-          label={formatMoney(props.precoProduto?.valorUnitario) ?? ""}
+          label={formatMoney(props.precoProduto.valorUnitario) ?? ''}
         />
       )}
     </BoxApp>
