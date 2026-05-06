@@ -168,7 +168,7 @@ export function CardProduto(props: propsCardProduto) {
             await adicionar();
           }}
         >
-          {produto.pesos.length > 0 && (
+          {produto.pesos?.length > 0 && (
             <BoxApp width="100%" display="flex" flexDirection="column" gap=".5rem">
               <TextApp titulo="Pesos disponíveis" marginBotton="1rem" />
               {produto.pesos.map((peso, index) => (
@@ -184,7 +184,7 @@ export function CardProduto(props: propsCardProduto) {
               ))}
             </BoxApp>
           )}
-          {produto.tamanhos.length > 0 && (
+          {produto.tamanhos?.length > 0 && (
             <BoxApp width="100%" display="flex" flexDirection="column" gap=".5rem">
               <TextApp fontSize="12px" titulo="Tamanhos disponíveis" marginBotton="1rem" />
               {produto.tamanhos.map((tamanho, index) => (
